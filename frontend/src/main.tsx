@@ -12,6 +12,7 @@ import { TripDetailPage } from '@/features/trips/TripDetailPage'
 import { EditTripPage, NewTripPage } from '@/features/trips/TripFormPages'
 import { TripsPage } from '@/features/trips/TripsPage'
 import { ItineraryPage } from '@/features/itinerary/ItineraryPage'
+import { ExpensesPage } from '@/features/expenses/ExpensesPage'
 import './index.css'
 
 const queryClient = new QueryClient({
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
           { path: '/viagens/:id', element: <TripDetailPage /> },
           { path: '/viagens/:id/editar', element: <EditTripPage /> },
           { path: '/viagens/:id/roteiro', element: <ItineraryPage /> },
+          { path: '/viagens/:id/orcamento', element: <ExpensesPage /> },
           { path: '/explorar', element: <PlaceholderPage title="Explorar" /> },
           { path: '/perfil', element: <PlaceholderPage title="Perfil" /> },
         ],

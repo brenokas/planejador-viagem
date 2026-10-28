@@ -75,13 +75,24 @@ export function formatMoney(centavos: number, moeda: string): string {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: moeda }).format(centavos / 100)
 }
 
-/** Converte "1.234,56" (ou "1234.56") para centavos. Retorna null se vazio e NaN se inválido. */
-export function parseMoney(texto: string): number | null {
+/** Converte "1.234,56" (ou "1234.56") para número. Retorna null se vazio e NaN se inválido. */
+export function parseDecimal(texto: string): number | null {
   const limpo = texto.trim().replace(/[^\d,.-]/g, '')
   if (!limpo) return null
   const normalizado = limpo.includes(',') ? limpo.replace(/\./g, '').replace(',', '.') : limpo
   const valor = Number(normalizado)
-  return Number.isFinite(valor) ? Math.round(valor * 100) : Number.NaN
+  return Number.isFinite(valor) ? valor : Number.NaN
+}
+
+/** Converte "1.234,56" (ou "1234.56") para centavos. Retorna null se vazio e NaN se inválido. */
+export function parseMoney(texto: string): number | null {
+  const valor = parseDecimal(texto)
+  return valor == null || Number.isNaN(valor) ? valor : Math.round(valor * 100)
+}
+
+export function todayIso(): string {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
 
 export function centsToInput(centavos: number | null): string {

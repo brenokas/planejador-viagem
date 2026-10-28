@@ -19,6 +19,7 @@ import { AvatarGroup } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Menu, MenuItem } from '@/components/ui/menu'
 import { useActivities } from '@/features/itinerary/api'
+import { useExpenseSummary, type Summary } from '@/features/expenses/api'
 import { formatDateRange, formatMoney, formatStatus, tripDays, tripStatus } from '@/lib/format'
 import { useArchiveTrip, useDeleteTrip, useTrip } from './api'
 import { InviteDialog } from './InviteDialog'
@@ -30,6 +31,11 @@ function resumoRoteiro(total: number | undefined) {
   return total === 1 ? '1 atividade planejada' : `${total} atividades planejadas`
 }
 
+function resumoOrcamento(resumo: Summary | undefined) {
+  if (!resumo || resumo.totalGastoCentavos === 0) return 'Despesas e quem deve quanto'
+  return `${formatMoney(resumo.totalGastoCentavos, resumo.moeda)} gastos`
+}
+
 export function TripDetailPage() {
   const id = Number(useParams().id)
   const navigate = useNavigate()
@@ -37,6 +43,7 @@ export function TripDetailPage() {
   const archive = useArchiveTrip(id)
   const remove = useDeleteTrip(id)
   const atividades = useActivities(id)
+  const resumo = useExpenseSummary(id)
   const [convidar, setConvidar] = useState(false)
   const [participantes, setParticipantes] = useState(false)
 
@@ -67,7 +74,7 @@ export function TripDetailPage() {
         <div className="absolute inset-x-0 top-0 flex justify-between p-3">
           <Link
             to="/"
-            className="rounded-lg bg-white/90 p-2 text-slate-700 shadow-sm backdrop-blur hover:bg-white"
+            className="rounded-lg bg-white p-2 text-slate-700 shadow-sm hover:bg-slate-50"
             aria-label="Voltar"
           >
             <ArrowLeft className="size-5" />
@@ -158,7 +165,12 @@ export function TripDetailPage() {
             description={resumoRoteiro(atividades.data?.length)}
             to={`/viagens/${id}/roteiro`}
           />
-          <Section icon={Wallet} title="Orçamento" description="Despesas e quem deve quanto" />
+          <Section
+            icon={Wallet}
+            title="Orçamento"
+            description={resumoOrcamento(resumo.data)}
+            to={`/viagens/${id}/orcamento`}
+          />
           <Section icon={CheckSquare} title="Checklist" description="Bagagem e tarefas" />
         </div>
       </div>
