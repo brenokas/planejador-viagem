@@ -101,6 +101,12 @@ cd frontend && npm run build && npm run lint
 | PUT / DELETE | `/api/trips/{id}/activities/{aid}` | edita / exclui |
 | PUT | `/api/trips/{id}/activities/order` | `{data, ids}` — nova ordem de um dia |
 | GET | `/api/geo/search?q=` | busca de locais (OpenStreetMap/Nominatim, com cache e limite de 1 req/s) |
+| GET | `/api/trips/{id}/expenses` | despesas (mais recentes primeiro) |
+| POST | `/api/trips/{id}/expenses` | lança despesa; `modoDivisao` `IGUAL` (`participantes`) ou `VALORES` (`valores`); sem `taxaCambio`, usa a cotação do dia |
+| PUT / DELETE | `/api/trips/{id}/expenses/{eid}` | edita / exclui |
+| GET | `/api/trips/{id}/expenses/summary` | total gasto, previsto no roteiro, por categoria, saldos e acertos sugeridos |
+| POST | `/api/trips/{id}/expenses/settle` | `{de, para, valorCentavos}` — registra um acerto entre participantes |
+| GET | `/api/exchange?de=EUR&para=BRL` | cotação (open.er-api.com, cache de 6 h) |
 
 Quem não participa de uma viagem recebe 404 em qualquer rota dela.
 

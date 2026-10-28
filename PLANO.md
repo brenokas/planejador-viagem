@@ -59,8 +59,8 @@ TripMember    (tripId, userId, papel: DONO|EDITOR)
 TripInvite    (id, tripId, token, expiraEm, usadoPor)
 
 Activity      (id, tripId, data?, horaInicio, horaFim, local, lat, lng, categoria, custoCentavos, notas, ordem, criadoPor, atualizadoPor, version)
-Expense       (id, tripId, descricao, valorCentavos, moeda, categoria, data, pagoPor)
-ExpenseSplit  (expenseId, userId, valorCentavos)
+Expense       (id, tripId, descricao, categoria, valorCentavos, moeda, taxaCambio, valorConvertidoCentavos, data, pagoPor, modoDivisao)
+ExpenseSplit  (expenseId, userId, valorCentavos, valorConvertidoCentavos)
 ChecklistItem (id, tripId, texto, feito, tipo: BAGAGEM|TAREFA, responsavelId)
 AiMessage     (id, tripId, role, conteudo, criadoEm)
 ```
@@ -86,7 +86,7 @@ Toda rota `/api/trips/{id}/**` verifica se o usuário é membro da viagem.
    *Pronto quando:* do celular, no Wi-Fi, abre `http://192.168.0.X:8088`, cria conta, faz login e adiciona à tela inicial.
 2. ✅ **Viagens + convites** (controle de acesso por membro)
 3. ✅ **Roteiro + mapa** — atividades guardam a data diretamente (sem tabela `Day`); data nula = "Ideias"; atividades fora do período da viagem ficam visíveis numa seção própria.
-4. **Orçamento + divisão de despesas + câmbio**
+4. ✅ **Orçamento + divisão de despesas + câmbio** — câmbio pela open.er-api.com (cobre ARS/CLP/UYU, que a Frankfurter não tem), com taxa editável; acertos registrados como despesas da categoria `ACERTO`; moeda da viagem fica travada após a primeira despesa.
 5. **Checklist**
 6. **IA com Gemini** (tratar 429, prompts enxutos, saída JSON validada, prévia + aceite)
 7. **Tempo real (SSE)**
