@@ -1,0 +1,18 @@
+# Apenas o banco, para desenvolvimento (backend e frontend rodam fora do Docker).
+# Porta 5433 porque já existe um PostgreSQL do sistema na 5432.
+name: planejador-dev
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: planejador
+      POSTGRES_USER: planejador
+      POSTGRES_PASSWORD: planejador
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - db-dev-data:/var/lib/postgresql/data
+
+volumes:
+  db-dev-data:
