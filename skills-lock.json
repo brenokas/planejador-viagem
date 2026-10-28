@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "antiwebslop": {
+      "source": "cesaroeduardo/antiwebslop",
+      "sourceType": "github",
+      "skillPath": "skills/antiwebslop/SKILL.md",
+      "computedHash": "f7d458a8e212af31d2aa647e720b91a298ae4f1e01b51c8fce46397b8be3f208"
+    }
+  }
+}
