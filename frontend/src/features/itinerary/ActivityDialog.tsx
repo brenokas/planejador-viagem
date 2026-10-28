@@ -152,7 +152,7 @@ function ActivityForm({
                 {i < datas.length ? `Dia ${i + 1} · ${formatDay(d)}` : `${formatDay(d)} (fora da viagem)`}
               </option>
             ))}
-            <option value={IDEIAS}>💡 Ideias (sem dia)</option>
+            <option value={IDEIAS}>Ideias (sem dia)</option>
           </Select>
         </Field>
         <Field label="Categoria" htmlFor="categoria">

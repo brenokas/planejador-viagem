@@ -1,4 +1,4 @@
-import { ArrowLeft, List, Map as MapIcon, Plus } from 'lucide-react'
+import { ArrowLeft, Lightbulb, List, Map as MapIcon, Plus } from 'lucide-react'
 import { lazy, Suspense, useMemo, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router'
 import { Button } from '@/components/ui/button'
@@ -119,7 +119,11 @@ export function ItineraryPage() {
 
           <DaySection
             id="ideias"
-            titulo="💡 Ideias"
+            titulo={
+              <span className="inline-flex items-center gap-1.5">
+                <Lightbulb className="size-4 text-amber-500" aria-hidden /> Ideias
+              </span>
+            }
             subtitulo="Coisas para fazer, ainda sem dia definido"
             atividades={grupos.ideias.atividades}
             moeda={moeda}

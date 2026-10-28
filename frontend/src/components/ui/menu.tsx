@@ -20,7 +20,7 @@ export function Menu({ trigger, children }: { trigger: ReactNode; children: (clo
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="rounded-lg bg-white/90 p-2 text-slate-700 shadow-sm backdrop-blur hover:bg-white"
+        className="rounded-lg bg-white p-2 text-slate-700 shadow-sm hover:bg-slate-50"
       >
         {trigger}
       </button>

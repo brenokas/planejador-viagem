@@ -69,7 +69,7 @@ export function PlaceSearch({
         <ul className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-lg bg-white py-1 shadow-lg ring-1 ring-slate-200">
           {busca.isFetching ? (
             <li className="flex items-center gap-2 px-3 py-2 text-sm text-slate-500">
-              <Loader2 className="size-4 animate-spin" /> Buscando…
+              <Loader2 className="size-4 motion-safe:animate-spin" /> Buscando…
             </li>
           ) : busca.error ? (
             <li className="px-3 py-2 text-sm text-red-600">{busca.error.message}</li>
