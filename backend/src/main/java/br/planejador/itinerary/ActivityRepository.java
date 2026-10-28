@@ -18,6 +18,9 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
 	Optional<Activity> findByIdAndTripId(Long id, Long tripId);
 
+	@Query("select coalesce(sum(a.custoCentavos), 0) from Activity a where a.tripId = :tripId")
+	long sumCusto(Long tripId);
+
 	/** Atividades de um dia; data nula = Ideias. */
 	default List<Activity> findForDay(Long tripId, LocalDate data) {
 		return data == null

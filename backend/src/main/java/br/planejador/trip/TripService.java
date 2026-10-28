@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.planejador.common.ApiException;
 import br.planejador.common.GlobalExceptionHandler;
+import br.planejador.expense.ExpenseRepository;
 import br.planejador.trip.TripDtos.MemberResponse;
 import br.planejador.trip.TripDtos.TripRequest;
 import br.planejador.trip.TripDtos.TripResponse;
@@ -29,12 +30,15 @@ public class TripService {
 	private final TripMemberRepository members;
 	private final UserRepository users;
 	private final TripAccess access;
+	private final ExpenseRepository expenses;
 
-	public TripService(TripRepository trips, TripMemberRepository members, UserRepository users, TripAccess access) {
+	public TripService(TripRepository trips, TripMemberRepository members, UserRepository users, TripAccess access,
+			ExpenseRepository expenses) {
 		this.trips = trips;
 		this.members = members;
 		this.users = users;
 		this.access = access;
+		this.expenses = expenses;
 	}
 
 	@Transactional(readOnly = true)
@@ -77,6 +81,10 @@ public class TripService {
 			throw new ApiException(HttpStatus.CONFLICT, GlobalExceptionHandler.CONFLITO);
 		}
 		validatePeriod(req);
+		if (!trip.getMoeda().equalsIgnoreCase(req.moeda()) && expenses.existsByTripId(tripId)) {
+			throw ApiException.invalidField("moeda",
+					"Não é possível trocar a moeda depois de lançar despesas, pois os valores convertidos ficariam errados.");
+		}
 		apply(trip, req);
 		trips.saveAndFlush(trip);
 		return toResponse(trip, userId);
