@@ -18,7 +18,7 @@ public final class TestUsers {
 
 	/** Cadastra um usuário com e-mail único e retorna o cookie de autenticação. */
 	public static Cookie register(MockMvc mvc, String nome) throws Exception {
-		String email = nome.toLowerCase() + "-" + UUID.randomUUID() + "@teste.com";
+		String email = nome.toLowerCase().replaceAll("\\s+", ".") + "-" + UUID.randomUUID() + "@teste.com";
 		var result = mvc.perform(post("/api/auth/register").contentType(MediaType.APPLICATION_JSON)
 				.content("""
 						{"nome":"%s","email":"%s","senha":"senha-forte"}

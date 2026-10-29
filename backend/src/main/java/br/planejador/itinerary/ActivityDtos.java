@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Max;
@@ -34,6 +35,11 @@ public final class ActivityDtos {
 
 	/** Nova ordem das atividades de um dia (data nula = Ideias). Deve conter todos os ids do dia. */
 	public record ReorderRequest(LocalDate data, @NotNull List<Long> ids) {
+	}
+
+	/** Várias atividades de uma vez (ex.: sugestões aceitas da IA). */
+	public record BulkRequest(
+			@NotNull @Size(min = 1, max = 60, message = "Envie entre 1 e 60 atividades.") List<@Valid ActivityRequest> itens) {
 	}
 
 	public record ActivityResponse(

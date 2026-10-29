@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.planejador.auth.CurrentUser;
 import br.planejador.itinerary.ActivityDtos.ActivityRequest;
 import br.planejador.itinerary.ActivityDtos.ActivityResponse;
+import br.planejador.itinerary.ActivityDtos.BulkRequest;
 import br.planejador.itinerary.ActivityDtos.ReorderRequest;
 import jakarta.validation.Valid;
 
@@ -41,6 +42,13 @@ public class ActivityController {
 	ActivityResponse create(@AuthenticationPrincipal Jwt jwt, @PathVariable Long tripId,
 			@Valid @RequestBody ActivityRequest req) {
 		return service.create(tripId, CurrentUser.id(jwt), req);
+	}
+
+	@PostMapping("/bulk")
+	@ResponseStatus(HttpStatus.CREATED)
+	List<ActivityResponse> createMany(@AuthenticationPrincipal Jwt jwt, @PathVariable Long tripId,
+			@Valid @RequestBody BulkRequest req) {
+		return service.createMany(tripId, CurrentUser.id(jwt), req.itens());
 	}
 
 	@PutMapping("/{id}")

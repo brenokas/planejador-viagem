@@ -28,6 +28,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET:?Defina JWT_SECRET no .env}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODELS: ${GEMINI_MODELS:-}
       COOKIE_SECURE: "false"
 
   web:

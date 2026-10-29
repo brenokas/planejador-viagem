@@ -57,6 +57,21 @@ public class ActivityService {
 	}
 
 	@Transactional
+	public List<ActivityResponse> createMany(Long tripId, Long userId, List<ActivityRequest> itens) {
+		access.requireMember(tripId, userId);
+		List<Activity> criadas = new ArrayList<>();
+		for (ActivityRequest req : itens) {
+			validate(tripId, req);
+			Activity activity = new Activity(tripId, userId);
+			apply(activity, req, userId);
+			place(activity);
+			activities.saveAndFlush(activity);
+			criadas.add(activity);
+		}
+		return toResponses(criadas);
+	}
+
+	@Transactional
 	public ActivityResponse update(Long tripId, Long activityId, Long userId, ActivityRequest req) {
 		access.requireMember(tripId, userId);
 		Activity activity = load(tripId, activityId);
