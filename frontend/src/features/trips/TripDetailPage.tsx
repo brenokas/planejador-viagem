@@ -19,6 +19,7 @@ import { AvatarGroup } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Menu, MenuItem } from '@/components/ui/menu'
 import { useActivities } from '@/features/itinerary/api'
+import { useChecklist, type ChecklistItem } from '@/features/checklist/api'
 import { useExpenseSummary, type Summary } from '@/features/expenses/api'
 import { formatDateRange, formatMoney, formatStatus, tripDays, tripStatus } from '@/lib/format'
 import { useArchiveTrip, useDeleteTrip, useTrip } from './api'
@@ -29,6 +30,11 @@ import { TripCover } from './TripCover'
 function resumoRoteiro(total: number | undefined) {
   if (!total) return 'Atividades dia a dia e mapa'
   return total === 1 ? '1 atividade planejada' : `${total} atividades planejadas`
+}
+
+function resumoChecklist(itens: ChecklistItem[] | undefined) {
+  if (!itens?.length) return 'Bagagem e tarefas'
+  return `${itens.filter((i) => i.feito).length} de ${itens.length} itens prontos`
 }
 
 function resumoOrcamento(resumo: Summary | undefined) {
@@ -44,6 +50,7 @@ export function TripDetailPage() {
   const remove = useDeleteTrip(id)
   const atividades = useActivities(id)
   const resumo = useExpenseSummary(id)
+  const checklist = useChecklist(id)
   const [convidar, setConvidar] = useState(false)
   const [participantes, setParticipantes] = useState(false)
 
@@ -171,7 +178,12 @@ export function TripDetailPage() {
             description={resumoOrcamento(resumo.data)}
             to={`/viagens/${id}/orcamento`}
           />
-          <Section icon={CheckSquare} title="Checklist" description="Bagagem e tarefas" />
+          <Section
+            icon={CheckSquare}
+            title="Checklist"
+            description={resumoChecklist(checklist.data)}
+            to={`/viagens/${id}/checklist`}
+          />
         </div>
       </div>
 
