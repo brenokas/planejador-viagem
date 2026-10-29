@@ -48,7 +48,7 @@ Navegador / celular (Wi-Fi de casa)
 | Mapa | Atividades do dia no mapa (Leaflet + Nominatim) |
 | IA | Gerar roteiro, sugerir atividades do dia, lista de bagagem, chat sobre a viagem — sempre com prévia antes de salvar |
 
-Pós-MVP: offline, exportar PDF, clima integrado, upload de documentos.
+Pós-MVP: offline, exportar PDF, clima integrado, upload de documentos, lista de viagens em tempo real, HTTPS local (para PWA completo).
 
 ## Modelo de dados
 
@@ -90,7 +90,7 @@ Toda rota `/api/trips/{id}/**` verifica se o usuário é membro da viagem.
 5. ✅ **Checklist** — abas Bagagem e Tarefas, responsável e prazo opcionais, lista básica para começar e inclusão em lote (que a IA usará na fase 6).
 6. ✅ **IA com Gemini** — Interactions API chamada direto com `RestClient` (sem Spring AI, para não depender de uma biblioteca que talvez ainda não suporte a API nova e o Boot 4; não verificado); lista de modelos com fallback (o plano gratuito alterna entre sobrecarga e falta de cota); saída JSON validada, prévia com seleção e aceite; chat compartilhado com histórico.
 7. ✅ **Tempo real (SSE)** — um interceptor publica o tipo de mudança após toda alteração em `/api/trips/{id}/**` (sem espalhar código pelos serviços); eventos não carregam dados; aba de origem via `X-Client-Id`; presença de quem está com a viagem aberta; recarga completa ao reconectar.
-8. **Acabamento** — responsividade, testes, backup (`pg_dump`), README da rede local
+8. ✅ **Acabamento** — tela de Perfil (nome e senha) e remoção da aba Explorar; telas carregadas sob demanda (pacote inicial de 205 KB para 115 KB comprimido); retorno ao login quando a sessão expira; tela de erro de rota; testes do frontend com Vitest; revisão visual em 390/768/1440 px (corrigidos: mapa cortado no celular, maiúsculas em datas, botões só com ícone sem nome acessível, capas com gradiente genérico); backup diário agendado no cron; README final.
 
 ## Pontos de atenção
 
