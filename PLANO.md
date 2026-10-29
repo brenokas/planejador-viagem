@@ -11,7 +11,7 @@ acesso apenas pela rede Wi-Fi de casa.
 | Frontend | React + TypeScript + Vite, Tailwind CSS, React Router, TanStack Query, React Hook Form + Zod, dnd-kit, Leaflet (OSM), Recharts |
 | Backend | Java 21 + Spring Boot 4 + Maven, Spring Web, Spring Data JPA, Spring Security (JWT em cookie httpOnly), Validation, Flyway |
 | Banco | PostgreSQL 16 |
-| IA | Google Gemini (plano gratuito), modelo Flash, via Spring AI |
+| IA | Google Gemini (plano gratuito), modelos Flash via Interactions API (REST direto, com fallback entre modelos) |
 | Tempo real | SSE (Server-Sent Events) |
 | Auth | Apenas e-mail e senha (BCrypt) |
 | Hospedagem | Local, Docker Compose (`db`, `backend`, `web` = nginx, porta 8088 no host) |
@@ -62,7 +62,7 @@ Activity      (id, tripId, data?, horaInicio, horaFim, local, lat, lng, categori
 Expense       (id, tripId, descricao, categoria, valorCentavos, moeda, taxaCambio, valorConvertidoCentavos, data, pagoPor, modoDivisao)
 ExpenseSplit  (expenseId, userId, valorCentavos, valorConvertidoCentavos)
 ChecklistItem (id, tripId, texto, feito, tipo: BAGAGEM|TAREFA, responsavelId, prazo, feitoPor)
-AiMessage     (id, tripId, role, conteudo, criadoEm)
+AiMessage     (id, tripId, userId?, role, conteudo, criadoEm)
 ```
 
 ## API REST (resumo)
@@ -88,7 +88,7 @@ Toda rota `/api/trips/{id}/**` verifica se o usuário é membro da viagem.
 3. ✅ **Roteiro + mapa** — atividades guardam a data diretamente (sem tabela `Day`); data nula = "Ideias"; atividades fora do período da viagem ficam visíveis numa seção própria.
 4. ✅ **Orçamento + divisão de despesas + câmbio** — câmbio pela open.er-api.com (cobre ARS/CLP/UYU, que a Frankfurter não tem), com taxa editável; acertos registrados como despesas da categoria `ACERTO`; moeda da viagem fica travada após a primeira despesa.
 5. ✅ **Checklist** — abas Bagagem e Tarefas, responsável e prazo opcionais, lista básica para começar e inclusão em lote (que a IA usará na fase 6).
-6. **IA com Gemini** (tratar 429, prompts enxutos, saída JSON validada, prévia + aceite)
+6. ✅ **IA com Gemini** — Interactions API chamada direto com `RestClient` (sem Spring AI, que não acompanha a API nova nem o Boot 4); lista de modelos com fallback (o plano gratuito alterna entre sobrecarga e falta de cota); saída JSON validada, prévia com seleção e aceite; chat compartilhado com histórico.
 7. **Tempo real (SSE)**
 8. **Acabamento** — responsividade, testes, backup (`pg_dump`), README da rede local
 

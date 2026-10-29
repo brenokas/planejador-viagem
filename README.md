@@ -112,6 +112,22 @@ cd frontend && npm run build && npm run lint
 | POST | `/api/trips/{id}/checklist/bulk` | `{tipo, textos[]}` — vários de uma vez, ignorando repetidos |
 | PUT / DELETE | `/api/trips/{id}/checklist/{iid}` | edita / exclui |
 | PATCH | `/api/trips/{id}/checklist/{iid}/done` | `{feito}` — marca ou desmarca |
+| POST | `/api/trips/{id}/activities/bulk` | `{itens[]}` — várias atividades de uma vez (aceitar sugestões) |
+| POST | `/api/trips/{id}/ai/itinerary` | `{ritmo, interesses[], observacoes}` → atividades sugeridas (até 14 dias) |
+| POST | `/api/trips/{id}/ai/day-suggestions` | `{data, pedido}` → sugestões para um dia (`data` nula = Ideias) |
+| POST | `/api/trips/{id}/ai/packing-list` | → `{bagagem[], tarefas[]}` sem repetir o checklist |
+| GET / POST / DELETE | `/api/trips/{id}/ai/chat` | histórico / nova pergunta `{mensagem}` / limpar |
+
+As rotas de IA só sugerem: nada é salvo sem o usuário aceitar.
+
+### IA (Gemini)
+
+- Defina `GEMINI_API_KEY` no `.env` (chave do [Google AI Studio](https://aistudio.google.com/apikey), plano gratuito).
+- O backend usa a Interactions API com `store=false` e tenta os modelos de `GEMINI_MODELS` em ordem
+  (padrão `gemini-3.5-flash-lite,gemini-3.8-flash,gemini-flash-latest`), pulando para o próximo em caso de
+  sobrecarga (503), limite de cota (429) ou demora.
+- No plano gratuito, o Google pode usar os prompts para melhorar os modelos. O contexto enviado tem só os primeiros
+  nomes, o roteiro, o orçamento e o checklist — evite colocar dados sensíveis (documentos, reservas) em notas.
 
 Quem não participa de uma viagem recebe 404 em qualquer rota dela.
 
