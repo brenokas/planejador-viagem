@@ -55,3 +55,22 @@ export function useLogout() {
     },
   })
 }
+
+export function useUpdateProfile() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (nome: string) => api<User>('/me', { method: 'PUT', body: json({ nome }) }),
+    onSuccess: (user) => {
+      qc.setQueryData(meKey, user)
+      // O nome aparece nos participantes das viagens.
+      qc.invalidateQueries({ queryKey: ['trips'] })
+    },
+  })
+}
+
+export function useChangePassword() {
+  return useMutation({
+    mutationFn: (body: { senhaAtual: string; novaSenha: string }) =>
+      api<void>('/me/senha', { method: 'PUT', body: json(body) }),
+  })
+}

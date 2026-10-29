@@ -1,4 +1,4 @@
-import { Compass, LogOut, Plane, User } from 'lucide-react'
+import { LogOut, Plane, User } from 'lucide-react'
 import type { ComponentType } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router'
 import { useLogout, useMe } from '@/features/auth/api'
@@ -8,7 +8,6 @@ type NavItem = { to: string; label: string; icon: ComponentType<{ className?: st
 
 const navItems: NavItem[] = [
   { to: '/', label: 'Viagens', icon: Plane },
-  { to: '/explorar', label: 'Explorar', icon: Compass },
   { to: '/perfil', label: 'Perfil', icon: User },
 ]
 
@@ -60,7 +59,7 @@ export function AppLayout() {
       </main>
 
       <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-2">
           {navItems.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}

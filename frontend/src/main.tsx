@@ -1,65 +1,105 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
 import { AppLayout } from '@/components/AppLayout'
-import { PlaceholderPage } from '@/components/PlaceholderPage'
+import { RouteError } from '@/components/RouteError'
 import { GuestOnly, RequireAuth } from '@/features/auth/guards'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { RegisterPage } from '@/features/auth/RegisterPage'
-import { InvitePage } from '@/features/trips/InvitePage'
-import { TripDetailPage } from '@/features/trips/TripDetailPage'
-import { EditTripPage, NewTripPage } from '@/features/trips/TripFormPages'
-import { TripsPage } from '@/features/trips/TripsPage'
-import { ItineraryPage } from '@/features/itinerary/ItineraryPage'
-import { ExpensesPage } from '@/features/expenses/ExpensesPage'
-import { ChecklistPage } from '@/features/checklist/ChecklistPage'
-import { AssistantPage } from '@/features/ai/AssistantPage'
-import { TripRealtime } from '@/features/realtime/TripRealtime'
+import { ApiError } from '@/lib/api'
 import './index.css'
 
+/** Sessão expirada em qualquer chamada: limpa o usuário e as guardas de rota levam ao login. */
+function onApiError(error: Error) {
+  if (error instanceof ApiError && error.status === 401) {
+    queryClient.setQueryData(['me'], null)
+  }
+}
+
 const queryClient = new QueryClient({
+  queryCache: new QueryCache({ onError: onApiError }),
+  mutationCache: new MutationCache({ onError: onApiError }),
   defaultOptions: {
     queries: { refetchOnWindowFocus: true, staleTime: 30_000 },
   },
 })
 
+// Cada tela vira um arquivo separado, carregado só quando é aberta.
 const router = createBrowserRouter([
   {
-    element: <GuestOnly />,
+    errorElement: <RouteError />,
+    hydrateFallbackElement: <div className="flex min-h-dvh items-center justify-center text-slate-500">Carregando…</div>,
     children: [
-      { path: '/login', element: <LoginPage /> },
-      { path: '/cadastro', element: <RegisterPage /> },
-    ],
-  },
-  {
-    element: <RequireAuth />,
-    children: [
-      { path: '/convite/:token', element: <InvitePage /> },
       {
-        element: <AppLayout />,
+        element: <GuestOnly />,
         children: [
-          { path: '/', element: <TripsPage /> },
-          { path: '/viagens/nova', element: <NewTripPage /> },
-          {
-            path: '/viagens/:id',
-            element: <TripRealtime />,
-            children: [
-              { index: true, element: <TripDetailPage /> },
-              { path: 'editar', element: <EditTripPage /> },
-              { path: 'roteiro', element: <ItineraryPage /> },
-              { path: 'orcamento', element: <ExpensesPage /> },
-              { path: 'checklist', element: <ChecklistPage /> },
-              { path: 'assistente', element: <AssistantPage /> },
-            ],
-          },
-          { path: '/explorar', element: <PlaceholderPage title="Explorar" /> },
-          { path: '/perfil', element: <PlaceholderPage title="Perfil" /> },
+          { path: '/login', element: <LoginPage /> },
+          { path: '/cadastro', element: <RegisterPage /> },
         ],
       },
+      {
+        element: <RequireAuth />,
+        children: [
+          {
+            path: '/convite/:token',
+            lazy: () => import('@/features/trips/InvitePage').then((m) => ({ Component: m.InvitePage })),
+          },
+          {
+            element: <AppLayout />,
+            errorElement: <RouteError />,
+            children: [
+              {
+                path: '/',
+                lazy: () => import('@/features/trips/TripsPage').then((m) => ({ Component: m.TripsPage })),
+              },
+              {
+                path: '/viagens/nova',
+                lazy: () => import('@/features/trips/TripFormPages').then((m) => ({ Component: m.NewTripPage })),
+              },
+              {
+                path: '/perfil',
+                lazy: () => import('@/features/auth/ProfilePage').then((m) => ({ Component: m.ProfilePage })),
+              },
+              {
+                path: '/viagens/:id',
+                lazy: () => import('@/features/realtime/TripRealtime').then((m) => ({ Component: m.TripRealtime })),
+                children: [
+                  {
+                    index: true,
+                    lazy: () => import('@/features/trips/TripDetailPage').then((m) => ({ Component: m.TripDetailPage })),
+                  },
+                  {
+                    path: 'editar',
+                    lazy: () => import('@/features/trips/TripFormPages').then((m) => ({ Component: m.EditTripPage })),
+                  },
+                  {
+                    path: 'roteiro',
+                    lazy: () =>
+                      import('@/features/itinerary/ItineraryPage').then((m) => ({ Component: m.ItineraryPage })),
+                  },
+                  {
+                    path: 'orcamento',
+                    lazy: () => import('@/features/expenses/ExpensesPage').then((m) => ({ Component: m.ExpensesPage })),
+                  },
+                  {
+                    path: 'checklist',
+                    lazy: () =>
+                      import('@/features/checklist/ChecklistPage').then((m) => ({ Component: m.ChecklistPage })),
+                  },
+                  {
+                    path: 'assistente',
+                    lazy: () => import('@/features/ai/AssistantPage').then((m) => ({ Component: m.AssistantPage })),
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      { path: '*', element: <Navigate to="/" replace /> },
     ],
   },
-  { path: '*', element: <Navigate to="/" replace /> },
 ])
 
 createRoot(document.getElementById('root')!).render(

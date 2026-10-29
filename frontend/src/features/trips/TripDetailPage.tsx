@@ -227,32 +227,21 @@ function Section({
   icon: ComponentType<{ className?: string }>
   title: string
   description: string
-  /** Sem link = módulo ainda não disponível. */
-  to?: string
+  to: string
 }) {
-  const conteudo = (
-    <>
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md hover:ring-primary/40"
+    >
       <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
         <Icon className="size-5" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="font-medium">
-          {title}
-          {!to && (
-            <span className="ml-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs font-normal text-slate-500">em breve</span>
-          )}
-        </p>
+        <p className="font-medium">{title}</p>
         <p className="truncate text-sm text-slate-500">{description}</p>
       </div>
-      {to && <ChevronRight className="size-5 shrink-0 text-slate-400" />}
-    </>
-  )
-  const classe = 'flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200'
-  return to ? (
-    <Link to={to} className={`${classe} transition hover:shadow-md hover:ring-primary/40`}>
-      {conteudo}
+      <ChevronRight className="size-5 shrink-0 text-slate-400" />
     </Link>
-  ) : (
-    <div className={`${classe} opacity-70`}>{conteudo}</div>
   )
 }
