@@ -1,7 +1,17 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
-export function Menu({ trigger, children }: { trigger: ReactNode; children: (close: () => void) => ReactNode }) {
+export function Menu({
+  trigger,
+  label = 'Mais opções',
+  triggerClassName,
+  children,
+}: {
+  trigger: ReactNode
+  label?: string
+  triggerClassName?: string
+  children: (close: () => void) => ReactNode
+}) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -10,8 +20,13 @@ export function Menu({ trigger, children }: { trigger: ReactNode; children: (clo
     const onClick = (e: MouseEvent) => {
       if (!ref.current?.contains(e.target as Node)) setOpen(false)
     }
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     document.addEventListener('mousedown', onClick)
-    return () => document.removeEventListener('mousedown', onClick)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onClick)
+      document.removeEventListener('keydown', onKey)
+    }
   }, [open])
 
   return (
@@ -20,7 +35,8 @@ export function Menu({ trigger, children }: { trigger: ReactNode; children: (clo
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="rounded-lg bg-white p-2 text-slate-700 shadow-sm hover:bg-slate-50"
+        aria-label={label}
+        className={cn('rounded-lg bg-white p-2 text-slate-700 shadow-sm hover:bg-slate-50', triggerClassName)}
       >
         {trigger}
       </button>

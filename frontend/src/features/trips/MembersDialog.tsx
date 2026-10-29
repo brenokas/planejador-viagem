@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router'
 import { Avatar } from '@/components/ui/avatar'
 import { Dialog } from '@/components/ui/dialog'
+import { useConfirm } from '@/components/ui/use-confirm'
 import { useMe } from '@/features/auth/api'
 import { useRemoveMember, type Trip } from './api'
 
@@ -17,13 +18,18 @@ export function MembersDialog({
 }) {
   const { data: me } = useMe()
   const remove = useRemoveMember(trip.id)
+  const confirm = useConfirm()
   const navigate = useNavigate()
   const souDono = trip.meuPapel === 'DONO'
 
-  const handleRemove = (userId: number, nome: string) => {
+  const handleRemove = async (userId: number, nome: string) => {
     const saindo = userId === me?.id
-    const pergunta = saindo ? 'Sair desta viagem? Você perderá o acesso a ela.' : `Remover ${nome} da viagem?`
-    if (!window.confirm(pergunta)) return
+    const ok = await confirm(
+      saindo
+        ? { titulo: 'Sair desta viagem?', mensagem: 'Você perderá o acesso a ela.', confirmar: 'Sair', perigo: true }
+        : { titulo: `Remover ${nome}?`, mensagem: `${nome} perderá o acesso à viagem.`, confirmar: 'Remover', perigo: true },
+    )
+    if (!ok) return
     remove.mutate(userId, {
       onSuccess: () => {
         if (saindo) navigate('/', { replace: true })

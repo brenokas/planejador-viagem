@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router'
+import { PageSkeleton } from '@/components/ui/skeleton'
 import { useCreateTrip, useTrip, useUpdateTrip } from './api'
 import { TripForm } from './TripForm'
 
@@ -33,7 +34,7 @@ export function EditTripPage() {
   const { data: trip, isPending, error } = useTrip(id)
   const update = useUpdateTrip(id)
 
-  if (isPending) return <p className="text-slate-500">Carregando…</p>
+  if (isPending) return <PageSkeleton />
   if (error) return <p className="text-red-600">{error.message}</p>
 
   return (

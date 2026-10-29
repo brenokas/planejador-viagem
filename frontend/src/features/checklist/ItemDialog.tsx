@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { Field, Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { useConfirm } from '@/components/ui/use-confirm'
 import type { Member } from '@/features/trips/api'
 import { useDeleteItem, useUpdateItem, type ChecklistItem, type ChecklistType } from './api'
 
@@ -38,6 +39,7 @@ function ItemForm({
 }) {
   const update = useUpdateItem(tripId)
   const remove = useDeleteItem(tripId)
+  const confirm = useConfirm()
   const [texto, setTexto] = useState(item.texto)
   const [tipo, setTipo] = useState<ChecklistType>(item.tipo)
   const [responsavel, setResponsavel] = useState(item.responsavelId ? String(item.responsavelId) : '')
@@ -61,8 +63,10 @@ function ItemForm({
     )
   }
 
-  const handleDelete = () => {
-    if (window.confirm(`Excluir "${item.texto}"?`)) remove.mutate(item.id, { onSuccess: onDone })
+  const handleDelete = async () => {
+    if (await confirm({ titulo: 'Excluir item?', mensagem: item.texto, confirmar: 'Excluir', perigo: true })) {
+      remove.mutate(item.id, { onSuccess: onDone })
+    }
   }
 
   return (

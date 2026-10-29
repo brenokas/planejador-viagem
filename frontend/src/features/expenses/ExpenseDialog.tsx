@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { Field, Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { useConfirm } from '@/components/ui/use-confirm'
 import type { Trip } from '@/features/trips/api'
 import { ApiError } from '@/lib/api'
 import { centsToInput, formatMoney, MOEDAS, parseDecimal, parseMoney, todayIso } from '@/lib/format'
@@ -74,6 +75,7 @@ export function ExpenseDialog({
 function ExpenseForm({ trip, expense, onDone }: { trip: Trip; expense?: Expense; onDone: () => void }) {
   const save = useSaveExpense(trip.id)
   const remove = useDeleteExpense(trip.id)
+  const confirm = useConfirm()
 
   // Quem já saiu da viagem continua aparecendo nas despesas antigas em que participou.
   const pessoas = [...trip.membros.map((m) => ({ id: m.id, nome: m.nome }))]
@@ -161,8 +163,9 @@ function ExpenseForm({ trip, expense, onDone }: { trip: Trip; expense?: Expense;
 
   const erroDivisao = errors.participantes?.message ?? (errors.valores?.message as string | undefined)
 
-  const handleDelete = () => {
-    if (!expense || !window.confirm(`Excluir "${expense.descricao}"?`)) return
+  const handleDelete = async () => {
+    if (!expense) return
+    if (!(await confirm({ titulo: 'Excluir despesa?', mensagem: expense.descricao, confirmar: 'Excluir', perigo: true }))) return
     remove.mutate(expense.id, { onSuccess: onDone })
   }
 

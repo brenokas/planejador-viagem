@@ -2,6 +2,7 @@ import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { buttonClass } from '@/components/ui/button-class'
+import { Skeleton } from '@/components/ui/skeleton'
 import { tripStatus } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { useTrips, type Trip } from './api'
@@ -43,7 +44,13 @@ export function TripsPage() {
       </div>
 
       {isPending ? (
-        <p className="text-slate-500">Carregando…</p>
+        <div role="status" aria-label="Carregando" className="space-y-4">
+          <Skeleton className="h-64 rounded-xl" />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <Skeleton className="h-52 rounded-xl" />
+            <Skeleton className="h-52 rounded-xl" />
+          </div>
+        </div>
       ) : error ? (
         <p className="text-red-600">{error.message}</p>
       ) : trips.length === 0 ? (

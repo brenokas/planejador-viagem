@@ -22,6 +22,19 @@
   --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
 }
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
 html,
 body,
 #root {

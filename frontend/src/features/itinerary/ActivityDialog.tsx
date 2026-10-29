@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
 import { Field, Input, Textarea } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { useConfirm } from '@/components/ui/use-confirm'
 import type { Trip } from '@/features/trips/api'
 import { ApiError } from '@/lib/api'
 import { centsToInput, parseMoney } from '@/lib/format'
@@ -82,6 +83,7 @@ function ActivityForm({
 }) {
   const save = useSaveActivity(trip.id)
   const remove = useDeleteActivity(trip.id)
+  const confirm = useConfirm()
   const {
     register,
     control,
@@ -131,8 +133,9 @@ function ActivityForm({
     ),
   )
 
-  const handleDelete = () => {
-    if (!activity || !window.confirm(`Excluir "${activity.titulo}"?`)) return
+  const handleDelete = async () => {
+    if (!activity) return
+    if (!(await confirm({ titulo: 'Excluir atividade?', mensagem: activity.titulo, confirmar: 'Excluir', perigo: true }))) return
     remove.mutate(activity.id, { onSuccess: onDone })
   }
 

@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router'
 import { AppLayout } from '@/components/AppLayout'
 import { RouteError } from '@/components/RouteError'
+import { ConfirmProvider } from '@/components/ui/confirm'
 import { GuestOnly, RequireAuth } from '@/features/auth/guards'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { RegisterPage } from '@/features/auth/RegisterPage'
@@ -105,7 +106,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <ConfirmProvider>
+        <RouterProvider router={router} />
+      </ConfirmProvider>
     </QueryClientProvider>
   </StrictMode>,
 )
