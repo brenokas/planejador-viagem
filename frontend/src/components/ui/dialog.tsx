@@ -47,8 +47,9 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="relative flex max-h-[92dvh] w-full max-w-md animate-[sheet-in_200ms_ease-out] flex-col rounded-t-2xl bg-white shadow-xl outline-none sm:max-h-[85dvh] sm:animate-[fade-in_150ms_ease-out] sm:rounded-2xl"
+        className="relative flex max-h-[92dvh] w-full max-w-md animate-[sheet-in_200ms_ease-out] flex-col rounded-t-2xl overflow-hidden bg-white shadow-lift ring-1 ring-slate-300 outline-none sm:max-h-[85dvh] sm:animate-[fade-in_150ms_ease-out] sm:rounded-2xl"
       >
+        <div className="airmail h-1.5 shrink-0 rounded-t-2xl" aria-hidden />
         <div className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-slate-200 sm:hidden" aria-hidden />
         <div className="flex shrink-0 items-center justify-between gap-3 px-5 pt-3 pb-3 sm:pt-5">
           <h2 className="text-lg font-semibold">{title}</h2>

@@ -1,25 +1,47 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/bricolage-grotesque';
+@import '@fontsource-variable/fraunces/soft.css';
+@import '@fontsource-variable/fraunces/soft-italic.css';
+@import '@fontsource/courier-prime/400.css';
+@import '@fontsource/courier-prime/700.css';
 
-/* Tokens documentados em DESIGN.md. A escala "slate" é redefinida como neutros quentes (papel e tinta). */
+/*
+ * Identidade "postal vintage" (ver DESIGN.md): papel creme, tinta sépia, azul-correio para ações
+ * e vermelho-tomate como cor da marca (carimbos, faixa de correio aéreo, destaques).
+ * A escala "slate" é redefinida como neutros de papel e tinta; "white" vira o creme dos cartões.
+ */
 @theme {
-  --color-primary: #0f6b63;
-  --color-primary-hover: #0b554f;
-  --color-primary-foreground: #ffffff;
+  --color-primary: #1e4b8f;
+  --color-primary-hover: #173a70;
+  --color-primary-foreground: #fffaf0;
 
-  --color-slate-50: #f5f1ea;
-  --color-slate-100: #ede8df;
-  --color-slate-200: #e2dcd1;
-  --color-slate-300: #cfc7ba;
-  --color-slate-400: #a39a8d;
-  --color-slate-500: #6b645a;
-  --color-slate-600: #57514a;
-  --color-slate-700: #423d37;
-  --color-slate-800: #2e2a25;
-  --color-slate-900: #1f1c18;
+  --color-tomato: #d2492f;
+  --color-tomato-ink: #a93a22;
+  --color-mustard: #e0a63a;
+
+  --color-white: #fffaf0;
+
+  --color-slate-50: #f3ead8;
+  --color-slate-100: #ebe0c9;
+  --color-slate-200: #ddcfb2;
+  --color-slate-300: #c8b794;
+  --color-slate-400: #9f8d6e;
+  --color-slate-500: #6e604c;
+  --color-slate-600: #574b3b;
+  --color-slate-700: #42392d;
+  --color-slate-800: #2c261f;
+  --color-slate-900: #1e1a15;
 
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Bricolage Grotesque Variable', system-ui, sans-serif;
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-mono: 'Courier Prime', ui-monospace, 'Courier New', monospace;
+
+  --radius-lg: 0.375rem;
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 1rem;
+
+  --shadow-card: 3px 3px 0 0 rgb(30 26 21 / 0.08);
+  --shadow-lift: 4px 5px 0 0 rgb(30 26 21 / 0.14);
 }
 
 @keyframes fade-in {
@@ -44,17 +66,63 @@ body,
 body {
   @apply bg-slate-50 text-slate-900 antialiased;
   -webkit-tap-highlight-color: transparent;
+  /* Grão de papel bem sutil, gerado em SVG (sem arquivo externo). */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .27 0 0 0 0 .15 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 @layer base {
   h1,
-  h2 {
-    @apply font-display tracking-tight text-balance;
+  h2,
+  h3 {
+    @apply font-display text-balance;
+    font-variation-settings: 'SOFT' 100;
   }
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
   }
+}
+
+/* Rótulo datilografado: datas, contagens, legendas curtas. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Faixa listrada de envelope de correio aéreo. */
+@utility airmail {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--color-tomato) 0 10px,
+    transparent 10px 16px,
+    var(--color-primary) 16px 26px,
+    transparent 26px 32px
+  );
+}
+
+/*
+ * Moldura picotada de selo. A borda é o fundo do elemento com "furos" redondos que deixam ver o papel;
+ * o conteúdo fica dentro do padding.
+ */
+@utility stamp {
+  --stamp-r: 5px;
+  --stamp-bg: var(--color-white);
+  padding: calc(var(--stamp-r) * 2);
+  background:
+    radial-gradient(var(--stamp-r), #0000 97%, var(--stamp-bg)) round calc(var(--stamp-r) * -1.5)
+      calc(var(--stamp-r) * -1.5) / calc(var(--stamp-r) * 3) calc(var(--stamp-r) * 3),
+    linear-gradient(var(--stamp-bg) 0 0) no-repeat 50% / calc(100% - var(--stamp-r) * 3)
+      calc(100% - var(--stamp-r) * 3);
+  filter: drop-shadow(2px 3px 0 rgb(30 26 21 / 0.1));
+}
+
+/* Pautas de cartão-postal. */
+@utility ruled {
+  background-image: linear-gradient(transparent calc(100% - 1px), var(--color-slate-200) 0);
+  background-size: 100% 2rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -64,4 +132,9 @@ body {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/* Mapa com cara de impresso antigo; marcadores e linhas continuam nas cores dos dias. */
+.leaflet-tile-pane {
+  filter: sepia(0.35) saturate(0.8) contrast(0.95);
 }

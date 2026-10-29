@@ -15,7 +15,10 @@ export function TripsPage() {
   return (
     <div>
       <div className="mb-5 flex items-center justify-between gap-2">
-        <h1 className="text-3xl font-semibold">Minhas viagens</h1>
+        <div>
+          <p className="label-mono mb-1 text-tomato-ink">Caixa de postais</p>
+          <h1 className="text-4xl font-semibold">Minhas viagens</h1>
+        </div>
         <Link to="/viagens/nova" className={buttonClass()}>
           <Plus className="size-4" />
           <span className="hidden sm:inline">Nova viagem</span>
@@ -23,7 +26,7 @@ export function TripsPage() {
         </Link>
       </div>
 
-      <div className="mb-6 inline-flex rounded-lg bg-slate-200/70 p-1 text-sm" role="tablist">
+      <div className="mb-6 inline-flex rounded-lg bg-white p-1 ring-1 ring-slate-300 text-sm" role="tablist">
         {[
           { valor: false, label: 'Ativas' },
           { valor: true, label: 'Arquivadas' },
@@ -35,7 +38,7 @@ export function TripsPage() {
             onClick={() => setArquivadas(aba.valor)}
             className={cn(
               'rounded-md px-3 py-1.5 font-medium text-slate-600',
-              arquivadas === aba.valor && 'bg-white text-slate-900 shadow-sm',
+              arquivadas === aba.valor && 'bg-slate-800 text-white',
             )}
           >
             {aba.label}
@@ -46,7 +49,7 @@ export function TripsPage() {
       {isPending ? (
         <div role="status" aria-label="Carregando" className="space-y-4">
           <Skeleton className="h-64 rounded-xl" />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <Skeleton className="h-52 rounded-xl" />
             <Skeleton className="h-52 rounded-xl" />
           </div>
@@ -76,13 +79,13 @@ function ActiveTrips({ trips }: { trips: Trip[] }) {
       {destaque && <NextTripCard trip={destaque} />}
       {demais.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-semibold">Depois dessa</h2>
+          <h2 className="mb-4 text-2xl font-semibold italic">Depois dessa</h2>
           <TripGrid trips={demais} />
         </section>
       )}
       {passadas.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-semibold text-slate-500">Já aconteceram</h2>
+          <h2 className="mb-4 text-2xl font-semibold text-slate-500 italic">Já aconteceram</h2>
           <TripGrid trips={passadas} />
         </section>
       )}
@@ -92,7 +95,7 @@ function ActiveTrips({ trips }: { trips: Trip[] }) {
 
 function TripGrid({ trips }: { trips: Trip[] }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {trips.map((t) => (
         <TripCard key={t.id} trip={t} />
       ))}

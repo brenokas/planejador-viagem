@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-const cores = ['bg-teal-700', 'bg-rose-700', 'bg-amber-700', 'bg-sky-800', 'bg-emerald-800', 'bg-orange-700']
+const cores = ['bg-[#b03a22]', 'bg-[#1e4b8f]', 'bg-[#8a5a12]', 'bg-[#2f5d5a]', 'bg-[#6b3b7a]', 'bg-[#4f6328]']
 
 function iniciais(nome: string) {
   const partes = nome.trim().split(/\s+/)
@@ -12,7 +12,7 @@ export function Avatar({ id, nome, className }: { id: number; nome: string; clas
     <span
       title={nome}
       className={cn(
-        'inline-flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold text-white ring-2 ring-white',
+        'inline-flex size-8 shrink-0 items-center justify-center rounded-full font-mono text-xs font-bold text-white ring-2 ring-white',
         cores[id % cores.length],
         className,
       )}

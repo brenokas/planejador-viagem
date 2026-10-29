@@ -31,8 +31,8 @@ export function ActivityCard({
   return (
     <div
       className={cn(
-        'flex items-stretch gap-1 rounded-xl bg-white ring-1 ring-slate-200',
-        dragging && 'shadow-lg ring-primary',
+        'flex items-stretch gap-1 rounded-xl bg-white shadow-card ring-1 ring-slate-200',
+        dragging && 'shadow-lift ring-primary',
       )}
     >
       {handleProps && (
@@ -50,12 +50,12 @@ export function ActivityCard({
           <span className={cn('flex size-9 items-center justify-center rounded-full', cat.classe)}>
             <Icon className="size-4" />
           </span>
-          {inicio && <span className="text-xs font-medium text-slate-600">{inicio}</span>}
+          {inicio && <span className="font-mono text-xs font-bold text-slate-700">{inicio}</span>}
         </div>
         <div className="min-w-0 flex-1 space-y-1">
           <p className="font-medium leading-snug">
             {temCoordenadas && numero != null && (
-              <span className="mr-1.5 inline-flex size-5 items-center justify-center rounded-full bg-slate-800 align-text-bottom text-[10px] text-white">
+              <span className="mr-1.5 inline-flex size-5 items-center justify-center rounded-full bg-slate-800 align-text-bottom font-mono text-[10px] font-bold text-white">
                 {numero}
               </span>
             )}

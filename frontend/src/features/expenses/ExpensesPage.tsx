@@ -73,9 +73,9 @@ function BudgetOverview({ summary }: { summary: Summary }) {
   const estourou = orcamento != null && gasto > orcamento
 
   return (
-    <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
-      <p className="text-sm text-slate-500">Gasto até agora</p>
-      <p className="mt-1 font-display text-4xl font-semibold tracking-tight tabular-nums">{formatMoney(gasto, moeda)}</p>
+    <section className="rounded-xl bg-white p-5 shadow-card ring-1 ring-slate-200">
+      <p className="label-mono text-slate-500">Gasto até agora</p>
+      <p className="mt-2 font-display text-5xl font-semibold tabular-nums">{formatMoney(gasto, moeda)}</p>
 
       {orcamento != null ? (
         <div className="mt-4 space-y-2">
@@ -111,8 +111,8 @@ function Balances({ tripId, summary, temDespesas }: { tripId: number; summary: S
   if (pessoas.length < 2 || !temDespesas) return null
 
   return (
-    <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
-      <h2 className="font-semibold">Acertos</h2>
+    <section className="rounded-xl bg-white p-5 shadow-card ring-1 ring-slate-200">
+      <h2 className="text-xl font-semibold">Acertos</h2>
 
       {acertos.length === 0 ? (
         <p className="mt-2 text-sm text-slate-600">Contas em dia. Ninguém deve nada a ninguém.</p>
@@ -171,8 +171,8 @@ function Balances({ tripId, summary, temDespesas }: { tripId: number; summary: S
 function ByCategory({ summary }: { summary: Summary }) {
   const maior = summary.porCategoria[0]?.totalCentavos ?? 1
   return (
-    <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
-      <h2 className="mb-3 font-semibold">Por categoria</h2>
+    <section className="rounded-xl bg-white p-5 shadow-card ring-1 ring-slate-200">
+      <h2 className="mb-3 text-xl font-semibold">Por categoria</h2>
       <ul className="space-y-3">
         {summary.porCategoria.map((c) => {
           const cat = CATEGORIAS_DESPESA[c.categoria]
@@ -238,8 +238,8 @@ function ExpenseList({
     <section className="space-y-5">
       {[...porData.entries()].map(([data, lista]) => (
         <div key={data}>
-          <h3 className="mb-2 flex justify-between gap-2 px-1 text-sm font-medium text-slate-500">
-            <span className="first-letter:uppercase">{formatDia.format(parseDate(data))}</span>
+          <h3 className="label-mono mb-2 flex justify-between gap-2 px-1 text-slate-500">
+            <span>{formatDia.format(parseDate(data))}</span>
             <span className="tabular-nums">
               {formatMoney(
                 lista.filter((e) => e.categoria !== 'ACERTO').reduce((s, e) => s + e.valorConvertidoCentavos, 0),
@@ -247,7 +247,7 @@ function ExpenseList({
               )}
             </span>
           </h3>
-          <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl bg-white ring-1 ring-slate-200">
+          <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl bg-white shadow-card ring-1 ring-slate-200">
             {lista.map((e) => (
               <li key={e.id}>
                 <ExpenseRow expense={e} moedaViagem={trip.moeda} onClick={() => handleClick(e)} />

@@ -62,7 +62,7 @@ export function ChecklistPage() {
         }
       />
 
-      <div className="mb-4 grid grid-cols-2 gap-1 rounded-lg bg-slate-200/70 p-1 text-sm" role="tablist">
+      <div className="mb-4 grid grid-cols-2 gap-1 rounded-lg bg-white p-1 ring-1 ring-slate-300 text-sm" role="tablist">
         {ABAS.map((a) => {
           const itens = checklist.data.filter((i) => i.tipo === a.tipo)
           return (
@@ -73,7 +73,7 @@ export function ChecklistPage() {
               onClick={() => setTipo(a.tipo)}
               className={cn(
                 'rounded-md px-3 py-2 font-medium text-slate-600',
-                tipo === a.tipo && 'bg-white text-slate-900 shadow-sm',
+                tipo === a.tipo && 'bg-slate-800 text-white',
               )}
             >
               {a.label}{' '}
@@ -194,7 +194,7 @@ function ItemList({
   if (itens.length === 0) return null
 
   return (
-    <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl bg-white ring-1 ring-slate-200">
+    <ul className="divide-y divide-dashed divide-slate-200 overflow-hidden rounded-xl bg-white shadow-card ring-1 ring-slate-200">
       {itens.map((item) => {
         const responsavel = membros.find((m) => m.id === item.responsavelId)
         return (
@@ -209,8 +209,8 @@ function ItemList({
             >
               <span
                 className={cn(
-                  'flex size-6 items-center justify-center rounded-md border-2 transition-colors',
-                  item.feito ? 'border-primary bg-primary text-white' : 'border-slate-300 bg-white',
+                  'flex size-6 items-center justify-center rounded-sm border-2 transition-colors',
+                  item.feito ? 'border-tomato bg-tomato text-white' : 'border-slate-400 bg-white',
                 )}
               >
                 {item.feito && <Check className="size-4" strokeWidth={3} />}

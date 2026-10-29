@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router'
 import { AvatarGroup } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Menu, MenuItem } from '@/components/ui/menu'
+import { Postmark } from '@/components/ui/postmark'
 import { ProgressBar } from '@/components/ui/progress'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useConfirm } from '@/components/ui/use-confirm'
@@ -13,12 +14,14 @@ import { useExpenseSummary, type Summary } from '@/features/expenses/api'
 import { useActivities, type Activity } from '@/features/itinerary/api'
 import { formatTime } from '@/features/itinerary/days'
 import { useOnline } from '@/features/realtime/presence'
-import { formatDateRange, formatMoney, formatStatus, todayIso, tripDays, tripStatus } from '@/lib/format'
+import { formatDateRange, formatMoney, formatStatus, parseDate, todayIso, tripDays, tripStatus } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { useArchiveTrip, useDeleteTrip, useTrip, type Trip } from './api'
 import { InviteDialog } from './InviteDialog'
 import { MembersDialog } from './MembersDialog'
 import { TripCover } from './TripCover'
+
+const diaMes = new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short' })
 
 export function TripDetailPage() {
   const id = Number(useParams().id)
@@ -71,7 +74,12 @@ export function TripDetailPage() {
           capaUrl={trip.capaUrl}
           destino={trip.destino}
           tamanho="hero"
-          className="h-40 sm:h-56 sm:rounded-xl"
+          className="h-48 sm:h-64 sm:rounded-xl"
+        />
+        <Postmark
+          topo={trip.destino.split(',')[0]}
+          linhas={['partida', diaMes.format(parseDate(trip.dataInicio)).replace('.', '').replace(' de ', ' '), String(parseDate(trip.dataInicio).getFullYear())]}
+          className="absolute right-4 bottom-4 w-36 -rotate-12 text-white/60 sm:right-8 sm:bottom-6 sm:w-44"
         />
         <div className="absolute top-3 right-3">
           <Menu trigger={<MoreVertical className="size-5" />} label="Opções da viagem">
@@ -119,15 +127,17 @@ export function TripDetailPage() {
         </div>
       </div>
 
-      <div className="relative -mt-6 space-y-6 rounded-t-3xl bg-slate-50 px-4 pt-6 sm:mt-6 sm:rounded-none sm:bg-transparent sm:px-0 sm:pt-0">
+      <div className="space-y-6 px-4 pt-6 sm:px-0">
         <div className="space-y-3">
-          <div className="flex flex-wrap items-center gap-2 text-sm font-medium">
-            <span className={cn(status.tipo === 'concluida' ? 'text-slate-500' : 'text-primary')}>{formatStatus(status)}</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className={cn('label-mono', status.tipo === 'concluida' ? 'text-slate-500' : 'text-tomato-ink')}>
+              {formatStatus(status)}
+            </span>
             {trip.arquivada && (
-              <span className="rounded-full bg-slate-200 px-2.5 py-0.5 text-xs text-slate-600">Arquivada</span>
+              <span className="label-mono rounded-sm border border-slate-400 px-1.5 py-0.5 text-[10px] text-slate-600">Arquivada</span>
             )}
           </div>
-          <h1 className="text-3xl leading-tight font-semibold">{trip.titulo}</h1>
+          <h1 className="text-4xl leading-tight font-semibold">{trip.titulo}</h1>
           <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-sm text-slate-600">
             <p className="flex items-center gap-1.5">
               <CalendarDays className="size-4 shrink-0" />
@@ -141,7 +151,7 @@ export function TripDetailPage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between gap-3 rounded-xl bg-white p-3 ring-1 ring-slate-200">
+        <div className="flex items-center justify-between gap-3 rounded-xl bg-white p-3 shadow-card ring-1 ring-slate-200">
           <button onClick={() => setParticipantes(true)} className="flex min-w-0 items-center gap-3 text-left">
             <AvatarGroup pessoas={trip.membros} online={outrosOnline.map((m) => m.id)} />
             <span className="min-w-0 text-sm text-slate-700">
@@ -200,10 +210,10 @@ function SummaryCard({ to, title, children }: { to: string; title: string; child
   return (
     <Link
       to={to}
-      className="group flex flex-col gap-2 rounded-xl bg-white p-4 ring-1 ring-slate-200 transition-colors hover:ring-slate-400"
+      className="group flex flex-col gap-2 rounded-xl bg-white p-4 shadow-card ring-1 ring-slate-200 transition hover:-translate-y-0.5 hover:shadow-lift"
     >
       <span className="flex items-center justify-between gap-2">
-        <span className="font-display text-lg font-semibold tracking-tight group-hover:text-primary">{title}</span>
+        <span className="font-display text-xl font-semibold group-hover:text-primary">{title}</span>
         <ChevronRight className="size-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5" />
       </span>
       {children}
@@ -295,9 +305,9 @@ function Today({ base, atividades }: { base: string; atividades: Activity[] }) {
   const hoje = todayIso()
   const deHoje = atividades.filter((a) => a.data === hoje).sort((a, b) => a.ordem - b.ordem || a.id - b.id)
   return (
-    <section className="rounded-xl bg-white p-4 ring-1 ring-slate-200">
+    <section className="rounded-xl bg-white p-4 shadow-card ring-1 ring-slate-200">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Hoje</h2>
+        <h2 className="text-2xl font-semibold italic">Hoje</h2>
         <Link to={`${base}/roteiro`} className="text-sm font-medium text-primary hover:underline">
           Ver roteiro
         </Link>
@@ -308,7 +318,7 @@ function Today({ base, atividades }: { base: string; atividades: Activity[] }) {
         <ol className="divide-y divide-slate-100">
           {deHoje.map((a) => (
             <li key={a.id} className="flex items-baseline gap-3 py-2 text-sm">
-              <span className="w-11 shrink-0 font-medium text-slate-500 tabular-nums">{formatTime(a.horaInicio) ?? '—'}</span>
+              <span className="w-12 shrink-0 font-mono font-bold text-tomato-ink">{formatTime(a.horaInicio) ?? '—'}</span>
               <span className="min-w-0">
                 <span className="font-medium">{a.titulo}</span>
                 {a.localNome && <span className="block truncate text-slate-500">{a.localNome}</span>}
@@ -324,7 +334,7 @@ function Today({ base, atividades }: { base: string; atividades: Activity[] }) {
 function DetailSkeleton() {
   return (
     <div role="status" aria-label="Carregando" className="-mx-4 -mt-6 space-y-6 sm:mx-0 sm:mt-0">
-      <Skeleton className="h-40 rounded-none sm:h-56 sm:rounded-xl" />
+      <Skeleton className="h-48 rounded-none sm:h-64 sm:rounded-xl" />
       <div className="space-y-3 px-4 sm:px-0">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-8 w-64" />

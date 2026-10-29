@@ -2,11 +2,11 @@ import { ArrowRightLeft, BedDouble, Bus, Camera, Circle, ShoppingBag, UtensilsCr
 import type { ExpenseCategory } from './api'
 
 export const CATEGORIAS_DESPESA: Record<ExpenseCategory, { label: string; icon: LucideIcon; barra: string; classe: string }> = {
-  HOSPEDAGEM: { label: 'Hospedagem', icon: BedDouble, barra: 'bg-purple-500', classe: 'bg-purple-100 text-purple-700' },
-  TRANSPORTE: { label: 'Transporte', icon: Bus, barra: 'bg-indigo-500', classe: 'bg-indigo-100 text-indigo-700' },
-  ALIMENTACAO: { label: 'Alimentação', icon: UtensilsCrossed, barra: 'bg-orange-500', classe: 'bg-orange-100 text-orange-700' },
-  PASSEIOS: { label: 'Passeios', icon: Camera, barra: 'bg-teal-600', classe: 'bg-teal-100 text-teal-700' },
-  COMPRAS: { label: 'Compras', icon: ShoppingBag, barra: 'bg-rose-500', classe: 'bg-rose-100 text-rose-700' },
+  HOSPEDAGEM: { label: 'Hospedagem', icon: BedDouble, barra: 'bg-[#6b3b7a]', classe: 'bg-[#ebdfef] text-[#6b3b7a]' },
+  TRANSPORTE: { label: 'Transporte', icon: Bus, barra: 'bg-[#a26b14]', classe: 'bg-[#f3e4c2] text-[#7a4f10]' },
+  ALIMENTACAO: { label: 'Alimentação', icon: UtensilsCrossed, barra: 'bg-[#c2412b]', classe: 'bg-[#f6ddd3] text-[#a93a22]' },
+  PASSEIOS: { label: 'Passeios', icon: Camera, barra: 'bg-[#1e4b8f]', classe: 'bg-[#dce5f2] text-[#1e4b8f]' },
+  COMPRAS: { label: 'Compras', icon: ShoppingBag, barra: 'bg-[#4f6328]', classe: 'bg-[#e1e7d0] text-[#4f6328]' },
   OUTROS: { label: 'Outros', icon: Circle, barra: 'bg-slate-400', classe: 'bg-slate-100 text-slate-600' },
   ACERTO: { label: 'Acerto', icon: ArrowRightLeft, barra: 'bg-slate-300', classe: 'bg-slate-100 text-slate-500' },
 }

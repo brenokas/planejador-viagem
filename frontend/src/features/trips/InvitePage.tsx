@@ -31,10 +31,12 @@ export function InvitePage() {
       <p className="text-slate-600">
         <strong className="text-slate-900">{convite.convidadoPor}</strong> chamou você para planejar junto:
       </p>
-      <div className="my-6 rounded-xl bg-white p-5 ring-1 ring-slate-200">
-        <p className="font-display text-2xl leading-tight font-semibold tracking-tight">{convite.titulo}</p>
-        <p className="mt-2 text-sm text-slate-600">{convite.destino}</p>
-        <p className="text-sm text-slate-600">{formatDateRange(convite.dataInicio, convite.dataFim)}</p>
+      <div className="stamp my-6 -rotate-1">
+        <div className="px-3 py-3">
+          <p className="label-mono text-tomato-ink">{convite.destino}</p>
+          <p className="mt-1 font-display text-2xl leading-tight font-semibold italic">{convite.titulo}</p>
+          <p className="label-mono mt-2 text-slate-500">{formatDateRange(convite.dataInicio, convite.dataFim)}</p>
+        </div>
       </div>
       {accept.error && <p className="mb-3 text-sm text-red-600">{accept.error.message}</p>}
       <Button

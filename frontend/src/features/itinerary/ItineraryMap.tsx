@@ -10,7 +10,7 @@ export type MapGroup = { chave: string; titulo: string; cor: string; atividades:
 function icone(numero: number, cor: string) {
   return L.divIcon({
     className: '',
-    html: `<div style="background:${cor}" class="flex size-7 items-center justify-center rounded-full border-2 border-white text-xs font-bold text-white shadow-md">${numero}</div>`,
+    html: `<div style="background:${cor}" class="flex size-7 items-center justify-center rounded-full border-2 border-white font-mono text-xs font-bold text-white shadow-md">${numero}</div>`,
     iconSize: [28, 28],
     iconAnchor: [14, 14],
     popupAnchor: [0, -14],

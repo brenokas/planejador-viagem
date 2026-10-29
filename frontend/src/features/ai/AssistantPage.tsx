@@ -125,7 +125,7 @@ export function AssistantPage() {
 
       <form
         onSubmit={submit}
-        className="sticky bottom-[calc(4.75rem+env(safe-area-inset-bottom))] flex items-end gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:bottom-4"
+        className="sticky bottom-[calc(4.75rem+env(safe-area-inset-bottom))] flex items-end gap-2 rounded-xl bg-white p-2 shadow-lift ring-1 ring-slate-200 md:bottom-4"
       >
         <textarea
           value={texto}

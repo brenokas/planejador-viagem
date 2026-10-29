@@ -34,11 +34,12 @@ export function AppLayout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-30 border-b border-slate-200 bg-slate-50 pt-[env(safe-area-inset-top)]">
+        <div className="airmail h-1" aria-hidden />
         <div className="mx-auto flex h-14 max-w-5xl items-center justify-between gap-3 px-4">
           {tripId != null ? (
             <>
               <TripBackLink tripId={tripId} className="md:hidden" />
-              <Logo className="hidden md:block" />
+              <Logo className="hidden md:flex" />
             </>
           ) : (
             <Logo />
@@ -51,8 +52,8 @@ export function AppLayout() {
                 end={item.end}
                 className={({ isActive }) =>
                   cn(
-                    'rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900',
-                    isActive && 'bg-slate-100 text-slate-900',
+                    'label-mono rounded-lg px-3 py-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900',
+                    isActive && 'text-tomato-ink underline decoration-2 underline-offset-8',
                   )
                 }
               >
@@ -91,7 +92,7 @@ export function AppLayout() {
               className={({ isActive }) =>
                 cn(
                   'group flex min-w-0 flex-col items-center gap-0.5 pt-2 pb-1.5 text-[11px] font-medium text-slate-500',
-                  isActive && 'text-primary',
+                  isActive && 'font-semibold text-tomato-ink',
                 )
               }
             >
@@ -100,7 +101,7 @@ export function AppLayout() {
                   <span
                     className={cn(
                       'flex h-7 w-12 items-center justify-center rounded-full transition-colors',
-                      isActive && 'bg-primary/10',
+                      isActive && 'bg-tomato/12',
                     )}
                   >
                     <Icon className="size-5" />
@@ -118,8 +119,11 @@ export function AppLayout() {
 
 function Logo({ className }: { className?: string }) {
   return (
-    <NavLink to="/" className={cn('font-display text-lg font-bold tracking-tight text-slate-900', className)}>
-      Planejador<span className="text-primary">.</span>
+    <NavLink to="/" className={cn('flex items-baseline gap-2 text-slate-900', className)}>
+      <span className="font-display text-xl font-semibold italic" style={{ fontVariationSettings: "'SOFT' 100" }}>
+        Planejador
+      </span>
+      <span className="label-mono text-[10px] text-tomato-ink">de viagem</span>
     </NavLink>
   )
 }
@@ -133,7 +137,7 @@ function TripBackLink({ tripId, className }: { tripId: number; className?: strin
       aria-label="Voltar para as viagens"
     >
       <ChevronLeft className="size-5 shrink-0 text-slate-500" />
-      <span className="truncate font-display text-base font-semibold tracking-tight">{trip?.titulo ?? 'Viagens'}</span>
+      <span className="truncate font-display text-lg font-semibold italic">{trip?.titulo ?? 'Viagens'}</span>
     </NavLink>
   )
 }
@@ -144,7 +148,7 @@ function TripTabsBar({ tripId }: { tripId: number }) {
   return (
     <div className="hidden border-t border-slate-200 md:block">
       <div className="mx-auto flex h-12 max-w-5xl items-center gap-6 px-4">
-        <p className="max-w-56 truncate font-display font-semibold tracking-tight">{trip?.titulo}</p>
+        <p className="max-w-56 truncate font-display text-lg font-semibold italic">{trip?.titulo}</p>
         <nav aria-label="Partes da viagem" className="-mb-px flex h-full items-stretch gap-1">
           {TRIP_TABS.map((t) => (
             <NavLink
@@ -154,7 +158,7 @@ function TripTabsBar({ tripId }: { tripId: number }) {
               className={({ isActive }) =>
                 cn(
                   'flex items-center gap-2 border-b-2 border-transparent px-3 text-sm font-medium text-slate-500 hover:text-slate-900',
-                  isActive && 'border-primary text-slate-900',
+                  isActive && 'border-tomato text-slate-900',
                 )
               }
             >

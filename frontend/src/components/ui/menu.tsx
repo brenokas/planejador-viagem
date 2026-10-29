@@ -36,14 +36,14 @@ export function Menu({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={label}
-        className={cn('rounded-lg bg-white p-2 text-slate-700 shadow-sm hover:bg-slate-50', triggerClassName)}
+        className={cn('rounded-full bg-white p-2 text-slate-700 shadow-card ring-1 ring-slate-200 hover:bg-slate-50', triggerClassName)}
       >
         {trigger}
       </button>
       {open && (
         <div
           role="menu"
-          className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl bg-white py-1 shadow-lg ring-1 ring-slate-200"
+          className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl bg-white py-1 shadow-lift ring-1 ring-slate-300"
         >
           {children(() => setOpen(false))}
         </div>

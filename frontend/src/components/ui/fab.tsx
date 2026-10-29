@@ -6,8 +6,8 @@ export function Fab({ className, ...props }: ButtonHTMLAttributes<HTMLButtonElem
   return (
     <button
       className={cn(
-        'fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-20 flex size-14 items-center justify-center rounded-2xl',
-        'bg-primary text-primary-foreground shadow-lg shadow-slate-900/20 transition-transform hover:bg-primary-hover active:scale-95',
+        'fixed right-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-20 flex size-14 items-center justify-center rounded-full',
+        'bg-tomato text-white shadow-lift ring-2 ring-white transition-transform hover:bg-tomato-ink active:scale-95',
         'sm:hidden',
         className,
       )}

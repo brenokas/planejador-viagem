@@ -51,7 +51,7 @@ export function DayJumper({ alvos }: { alvos: JumpTarget[] }) {
             onClick={() => pular(a.id)}
             aria-current={ativo === a.id ? 'location' : undefined}
             className={cn(
-              'relative flex shrink-0 flex-col items-center rounded-lg px-3 py-1 text-xs leading-tight ring-1',
+              'relative flex shrink-0 flex-col items-center rounded-lg px-3 py-1 font-mono text-xs leading-tight ring-1',
               ativo === a.id
                 ? 'bg-slate-900 text-white ring-slate-900'
                 : 'bg-white text-slate-600 ring-slate-200 hover:bg-slate-100',
@@ -63,7 +63,7 @@ export function DayJumper({ alvos }: { alvos: JumpTarget[] }) {
               <span
                 className={cn(
                   'absolute top-1 right-1 size-1.5 rounded-full',
-                  ativo === a.id ? 'bg-white' : 'bg-primary',
+                  ativo === a.id ? 'bg-white' : 'bg-tomato',
                 )}
                 aria-label="tem atividades"
               />

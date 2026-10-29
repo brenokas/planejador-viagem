@@ -28,6 +28,7 @@ export function DaySection({
   id,
   titulo,
   subtitulo,
+  subtituloMono = true,
   atividades,
   moeda,
   vazio,
@@ -41,6 +42,8 @@ export function DaySection({
   id: string
   titulo: ReactNode
   subtitulo?: string
+  /** Datas ficam datilografadas; frases longas, em texto normal. */
+  subtituloMono?: boolean
   atividades: Activity[]
   moeda: string
   vazio?: string
@@ -73,11 +76,11 @@ export function DaySection({
         className="flex scroll-mt-32 items-center justify-between gap-2 rounded-xl border border-dashed border-slate-300 py-2 pr-1.5 pl-3 md:scroll-mt-44"
       >
         <div className="min-w-0">
-          <h2 className="flex items-center gap-2 font-semibold">
+          <h2 className="flex items-center gap-2 text-xl font-semibold">
             {titulo}
-            {hoje && <span className="rounded-full bg-primary px-2 py-0.5 font-sans text-xs font-medium text-white">Hoje</span>}
+            {hoje && <span className="label-mono rounded-sm bg-tomato px-1.5 py-0.5 text-[10px] text-white">Hoje</span>}
           </h2>
-          {subtitulo && <p className="truncate text-sm text-slate-500 first-letter:uppercase">{subtitulo}</p>}
+          {subtitulo && <p className="label-mono truncate text-slate-500">{subtitulo}</p>}
         </div>
         <div className="flex shrink-0 items-center">
           {onSuggest && (
@@ -102,11 +105,11 @@ export function DaySection({
     <section id={id} className="scroll-mt-32 md:scroll-mt-44">
       <header className="mb-2 flex items-end justify-between gap-2">
         <div className="min-w-0">
-          <h2 className="flex items-center gap-2 font-semibold">
+          <h2 className="flex items-center gap-2 text-xl font-semibold">
             {titulo}
-            {hoje && <span className="rounded-full bg-primary px-2 py-0.5 font-sans text-xs font-medium text-white">Hoje</span>}
+            {hoje && <span className="label-mono rounded-sm bg-tomato px-1.5 py-0.5 text-[10px] text-white">Hoje</span>}
           </h2>
-          {subtitulo && <p className="text-sm text-slate-500 first-letter:uppercase">{subtitulo}</p>}
+          {subtitulo && <p className={cn('text-slate-500', subtituloMono ? 'label-mono' : 'text-sm')}>{subtitulo}</p>}
         </div>
         {atividades.length > 0 && (
           <div className="flex items-center gap-0.5 text-sm">

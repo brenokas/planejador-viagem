@@ -273,7 +273,7 @@ function ExpenseForm({ trip, expense, onDone }: { trip: Trip; expense?: Expense;
             control={control}
             name="modoDivisao"
             render={({ field }) => (
-              <div className="inline-flex rounded-lg bg-slate-200/70 p-0.5 text-xs">
+              <div className="inline-flex rounded-lg bg-white p-0.5 ring-1 ring-slate-300 text-xs">
                 {(
                   [
                     ['IGUAL', 'Igualmente'],
@@ -286,7 +286,7 @@ function ExpenseForm({ trip, expense, onDone }: { trip: Trip; expense?: Expense;
                     onClick={() => field.onChange(v)}
                     className={cn(
                       'rounded-md px-2.5 py-1 font-medium text-slate-600',
-                      field.value === v && 'bg-white text-slate-900 shadow-sm',
+                      field.value === v && 'bg-slate-800 text-white',
                     )}
                   >
                     {label}

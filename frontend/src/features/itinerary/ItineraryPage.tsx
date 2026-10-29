@@ -18,8 +18,8 @@ import type { MapGroup } from './ItineraryMap'
 
 const ItineraryMap = lazy(() => import('./ItineraryMap'))
 
-const CORES_DIAS = ['#0d9488', '#e11d48', '#6366f1', '#f59e0b', '#0284c7', '#a855f7', '#16a34a', '#db2777']
-const COR_IDEIAS = '#94a3b8'
+const CORES_DIAS = ['#c2412b', '#1e4b8f', '#a26b14', '#2f5d5a', '#6b3b7a', '#4f6328', '#b5651d', '#3d6fb6']
+const COR_IDEIAS = '#9f8d6e'
 const TODOS = 'todos'
 const IDEIAS = 'ideias'
 
@@ -99,7 +99,7 @@ export function ItineraryPage() {
         }
       />
 
-      <div className="mb-3 inline-flex rounded-lg bg-slate-200/70 p-1 text-sm lg:hidden" role="tablist" aria-label="Visualização">
+      <div className="mb-3 inline-flex rounded-lg bg-white p-1 ring-1 ring-slate-300 text-sm lg:hidden" role="tablist" aria-label="Visualização">
         {(
           [
             ['lista', 'Lista', List],
@@ -113,7 +113,7 @@ export function ItineraryPage() {
             onClick={() => setVisao(valor)}
             className={cn(
               'flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium text-slate-600',
-              visao === valor && 'bg-white text-slate-900 shadow-sm',
+              visao === valor && 'bg-slate-800 text-white',
             )}
           >
             <Icon className="size-4" /> {label}
@@ -158,10 +158,11 @@ export function ItineraryPage() {
             id="ideias"
             titulo={
               <span className="inline-flex items-center gap-1.5">
-                <Lightbulb className="size-4 text-amber-500" aria-hidden /> Ideias
+                <Lightbulb className="size-4 text-mustard" aria-hidden /> Ideias
               </span>
             }
             subtitulo="Coisas para fazer, ainda sem dia definido"
+            subtituloMono={false}
             atividades={grupos.ideias.atividades}
             moeda={moeda}
             vazio="Anote lugares que vocês querem conhecer e decidam o dia depois."
@@ -177,6 +178,7 @@ export function ItineraryPage() {
               id="fora"
               titulo="Fora das datas da viagem"
               subtitulo="As datas da viagem mudaram. Edite para escolher um novo dia."
+              subtituloMono={false}
               atividades={grupos.foraDasDatas}
               moeda={moeda}
               onEdit={(a) => setDialog({ activity: a })}

@@ -2,12 +2,12 @@ import { BedDouble, Bus, Camera, Circle, ShoppingBag, UtensilsCrossed, type Luci
 import type { Category } from './api'
 
 export const CATEGORIAS: Record<Category, { label: string; icon: LucideIcon; cor: string; classe: string }> = {
-  PASSEIO: { label: 'Passeio', icon: Camera, cor: '#0d9488', classe: 'bg-teal-100 text-teal-700' },
-  REFEICAO: { label: 'Refeição', icon: UtensilsCrossed, cor: '#f97316', classe: 'bg-orange-100 text-orange-700' },
-  TRANSPORTE: { label: 'Transporte', icon: Bus, cor: '#6366f1', classe: 'bg-indigo-100 text-indigo-700' },
-  HOSPEDAGEM: { label: 'Hospedagem', icon: BedDouble, cor: '#a855f7', classe: 'bg-purple-100 text-purple-700' },
-  COMPRAS: { label: 'Compras', icon: ShoppingBag, cor: '#e11d48', classe: 'bg-rose-100 text-rose-700' },
-  OUTRO: { label: 'Outro', icon: Circle, cor: '#64748b', classe: 'bg-slate-100 text-slate-600' },
+  PASSEIO: { label: 'Passeio', icon: Camera, cor: '#1e4b8f', classe: 'bg-[#dce5f2] text-[#1e4b8f]' },
+  REFEICAO: { label: 'Refeição', icon: UtensilsCrossed, cor: '#c2412b', classe: 'bg-[#f6ddd3] text-[#a93a22]' },
+  TRANSPORTE: { label: 'Transporte', icon: Bus, cor: '#a26b14', classe: 'bg-[#f3e4c2] text-[#7a4f10]' },
+  HOSPEDAGEM: { label: 'Hospedagem', icon: BedDouble, cor: '#6b3b7a', classe: 'bg-[#ebdfef] text-[#6b3b7a]' },
+  COMPRAS: { label: 'Compras', icon: ShoppingBag, cor: '#4f6328', classe: 'bg-[#e1e7d0] text-[#4f6328]' },
+  OUTRO: { label: 'Outro', icon: Circle, cor: '#6e604c', classe: 'bg-slate-100 text-slate-600' },
 }
 
 export const CATEGORIA_ORDEM = Object.keys(CATEGORIAS) as Category[]
