@@ -107,6 +107,11 @@ cd frontend && npm run build && npm run lint
 | GET | `/api/trips/{id}/expenses/summary` | total gasto, previsto no roteiro, por categoria, saldos e acertos sugeridos |
 | POST | `/api/trips/{id}/expenses/settle` | `{de, para, valorCentavos}` — registra um acerto entre participantes |
 | GET | `/api/exchange?de=EUR&para=BRL` | cotação (open.er-api.com, cache de 6 h) |
+| GET | `/api/trips/{id}/checklist` | itens de bagagem e tarefas |
+| POST | `/api/trips/{id}/checklist` | `{tipo, texto, responsavelId?, prazo?}` |
+| POST | `/api/trips/{id}/checklist/bulk` | `{tipo, textos[]}` — vários de uma vez, ignorando repetidos |
+| PUT / DELETE | `/api/trips/{id}/checklist/{iid}` | edita / exclui |
+| PATCH | `/api/trips/{id}/checklist/{iid}/done` | `{feito}` — marca ou desmarca |
 
 Quem não participa de uma viagem recebe 404 em qualquer rota dela.
 
