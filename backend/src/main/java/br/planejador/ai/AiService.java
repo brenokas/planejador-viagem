@@ -405,7 +405,7 @@ public class AiService {
 	private List<ChatMessage> toChat(List<AiMessage> lista) {
 		Map<Long, String> nomes = names(lista.stream().map(AiMessage::getUserId).toList());
 		return lista.stream()
-				.map(m -> new ChatMessage(m.getId(), m.getRole(),
+				.map(m -> new ChatMessage(m.getId(), m.getRole(), m.getUserId(),
 						m.getUserId() == null ? null : nomes.get(m.getUserId()), m.getConteudo(), m.getCriadoEm()))
 				.toList();
 	}

@@ -54,7 +54,7 @@ public final class AiDtos {
 			@NotBlank(message = "Escreva uma pergunta.") @Size(max = 1000, message = "Pergunta muito longa.") String mensagem) {
 	}
 
-	public record ChatMessage(Long id, String role, String autorNome, String conteudo, Instant criadoEm) {
+	public record ChatMessage(Long id, String role, Long autorId, String autorNome, String conteudo, Instant criadoEm) {
 	}
 
 	/** Formato que pedimos ao modelo (validado e convertido em {@link ActivitySuggestion}). */
