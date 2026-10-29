@@ -1,3 +1,5 @@
+import { CLIENT_ID } from './clientId'
+
 export class ApiError extends Error {
   readonly status: number
   readonly campos: Record<string, string>
@@ -11,6 +13,7 @@ export class ApiError extends Error {
 
 export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   const headers = new Headers(init.headers)
+  headers.set('X-Client-Id', CLIENT_ID)
   if (init.body !== undefined && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json')
   }

@@ -15,6 +15,7 @@ import { ItineraryPage } from '@/features/itinerary/ItineraryPage'
 import { ExpensesPage } from '@/features/expenses/ExpensesPage'
 import { ChecklistPage } from '@/features/checklist/ChecklistPage'
 import { AssistantPage } from '@/features/ai/AssistantPage'
+import { TripRealtime } from '@/features/realtime/TripRealtime'
 import './index.css'
 
 const queryClient = new QueryClient({
@@ -40,12 +41,18 @@ const router = createBrowserRouter([
         children: [
           { path: '/', element: <TripsPage /> },
           { path: '/viagens/nova', element: <NewTripPage /> },
-          { path: '/viagens/:id', element: <TripDetailPage /> },
-          { path: '/viagens/:id/editar', element: <EditTripPage /> },
-          { path: '/viagens/:id/roteiro', element: <ItineraryPage /> },
-          { path: '/viagens/:id/orcamento', element: <ExpensesPage /> },
-          { path: '/viagens/:id/checklist', element: <ChecklistPage /> },
-          { path: '/viagens/:id/assistente', element: <AssistantPage /> },
+          {
+            path: '/viagens/:id',
+            element: <TripRealtime />,
+            children: [
+              { index: true, element: <TripDetailPage /> },
+              { path: 'editar', element: <EditTripPage /> },
+              { path: 'roteiro', element: <ItineraryPage /> },
+              { path: 'orcamento', element: <ExpensesPage /> },
+              { path: 'checklist', element: <ChecklistPage /> },
+              { path: 'assistente', element: <AssistantPage /> },
+            ],
+          },
           { path: '/explorar', element: <PlaceholderPage title="Explorar" /> },
           { path: '/perfil', element: <PlaceholderPage title="Perfil" /> },
         ],

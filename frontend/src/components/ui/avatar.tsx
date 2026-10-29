@@ -22,11 +22,25 @@ export function Avatar({ id, nome, className }: { id: number; nome: string; clas
   )
 }
 
-export function AvatarGroup({ pessoas }: { pessoas: { id: number; nome: string }[] }) {
+export function AvatarGroup({
+  pessoas,
+  online = [],
+}: {
+  pessoas: { id: number; nome: string }[]
+  /** ids de quem está online agora (recebem um ponto verde) */
+  online?: number[]
+}) {
   return (
     <div className="flex -space-x-2">
       {pessoas.map((p) => (
-        <Avatar key={p.id} id={p.id} nome={p.nome} />
+        <span key={p.id} className="relative">
+          <Avatar id={p.id} nome={p.nome} />
+          {online.includes(p.id) && (
+            <span className="absolute right-0 bottom-0 size-2.5 rounded-full bg-emerald-500 ring-2 ring-white">
+              <span className="sr-only">online agora</span>
+            </span>
+          )}
+        </span>
       ))}
     </div>
   )

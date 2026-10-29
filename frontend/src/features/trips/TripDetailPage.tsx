@@ -20,7 +20,9 @@ import { AvatarGroup } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Menu, MenuItem } from '@/components/ui/menu'
 import { useActivities } from '@/features/itinerary/api'
+import { useMe } from '@/features/auth/api'
 import { useChecklist, type ChecklistItem } from '@/features/checklist/api'
+import { useOnline } from '@/features/realtime/presence'
 import { useExpenseSummary, type Summary } from '@/features/expenses/api'
 import { formatDateRange, formatMoney, formatStatus, tripDays, tripStatus } from '@/lib/format'
 import { useArchiveTrip, useDeleteTrip, useTrip } from './api'
@@ -52,6 +54,8 @@ export function TripDetailPage() {
   const atividades = useActivities(id)
   const resumo = useExpenseSummary(id)
   const checklist = useChecklist(id)
+  const online = useOnline()
+  const { data: me } = useMe()
   const [convidar, setConvidar] = useState(false)
   const [participantes, setParticipantes] = useState(false)
 
@@ -68,6 +72,7 @@ export function TripDetailPage() {
   }
 
   const souDono = trip.meuPapel === 'DONO'
+  const outrosOnline = trip.membros.filter((m) => m.id !== me?.id && online.includes(m.id))
   const dias = tripDays(trip.dataInicio, trip.dataFim)
 
   const handleDelete = () => {
@@ -151,9 +156,17 @@ export function TripDetailPage() {
 
         <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
           <button onClick={() => setParticipantes(true)} className="flex items-center gap-3 text-left">
-            <AvatarGroup pessoas={trip.membros} />
+            <AvatarGroup pessoas={trip.membros} online={outrosOnline.map((m) => m.id)} />
             <span className="text-sm text-slate-600">
-              {trip.membros.length === 1 ? 'Só você por enquanto' : trip.membros.map((m) => m.nome.split(' ')[0]).join(' e ')}
+              {trip.membros.length === 1
+                ? 'Só você por enquanto'
+                : trip.membros.map((m) => m.nome.split(' ')[0]).join(' e ')}
+              {outrosOnline.length > 0 && (
+                <span className="block text-xs text-emerald-700">
+                  {outrosOnline.map((m) => m.nome.split(' ')[0]).join(' e ')}{' '}
+                  {outrosOnline.length === 1 ? 'está' : 'estão'} com a viagem aberta agora
+                </span>
+              )}
             </span>
           </button>
           <Button variant="outline" className="h-9 px-3" onClick={() => setConvidar(true)}>
