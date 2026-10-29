@@ -18,7 +18,7 @@ Sempre que concluir uma alteração ou uma fase de desenvolvimento, **faça comm
 - Um commit por mudança lógica; numa fase grande, prefira alguns commits coesos a um único gigante.
 - **Antes de commitar**, valide o que foi alterado:
   - backend: `cd backend && ./mvnw -q test`
-  - frontend: `cd frontend && npm run build && npm run lint`
+  - frontend: `cd frontend && npm test && npm run build && npm run lint`
   - Não faça commit com testes, build ou lint quebrados.
 - Nunca versione segredos: `.env` fica fora do git (use `.env.example`).
 - Não reescreva histórico já enviado (`push --force`, `rebase` de commits publicados) sem pedido explícito.
