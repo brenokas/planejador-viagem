@@ -120,6 +120,13 @@ cd frontend && npm run build && npm run lint
 
 As rotas de IA só sugerem: nada é salvo sem o usuário aceitar.
 
+### Tempo real
+
+`GET /api/trips/{id}/events` abre um stream SSE. Depois de qualquer alteração bem-sucedida numa viagem, quem está
+com ela aberta recebe `{tipo, origem}` (`trip`, `activities`, `expenses`, `checklist` ou `chat`) e recarrega só
+aquela parte pela API — o evento não carrega dados. O frontend envia `X-Client-Id` em toda requisição para ignorar
+os próprios eventos. O evento `presenca` traz os ids de quem está com a viagem aberta.
+
 ### IA (Gemini)
 
 - Defina `GEMINI_API_KEY` no `.env` (chave do [Google AI Studio](https://aistudio.google.com/apikey), plano gratuito).
