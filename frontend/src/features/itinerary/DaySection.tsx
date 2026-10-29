@@ -16,7 +16,7 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { Map as MapIcon, Plus } from 'lucide-react'
+import { Map as MapIcon, Plus, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { formatMoney } from '@/lib/format'
 import type { Activity } from './api'
@@ -34,6 +34,7 @@ export function DaySection({
   onEdit,
   onReorder,
   onShowMap,
+  onSuggest,
 }: {
   id: string
   titulo: ReactNode
@@ -45,6 +46,7 @@ export function DaySection({
   onEdit: (a: Activity) => void
   onReorder?: (ids: number[]) => void
   onShowMap?: () => void
+  onSuggest?: () => void
 }) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -77,6 +79,16 @@ export function DaySection({
               title="Ver no mapa"
             >
               <MapIcon className="size-4" />
+            </button>
+          )}
+          {onSuggest && (
+            <button
+              onClick={onSuggest}
+              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-primary"
+              aria-label="Sugerir com IA"
+              title="Sugerir com IA"
+            >
+              <Sparkles className="size-4" />
             </button>
           )}
           {onAdd && (

@@ -1,9 +1,10 @@
-import { ArrowLeft, Check, ChevronDown, Plus } from 'lucide-react'
+import { ArrowLeft, Check, ChevronDown, Plus, Sparkles } from 'lucide-react'
 import { useState, type FormEvent, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { AiPackingDialog } from '@/features/ai/AiPackingDialog'
 import { useMe } from '@/features/auth/api'
 import { useTrip, type Member } from '@/features/trips/api'
 import { parseDate, today } from '@/lib/format'
@@ -28,6 +29,7 @@ export function ChecklistPage() {
   const [tipo, setTipo] = useState<ChecklistType>('BAGAGEM')
   const [filtro, setFiltro] = useState<Filtro>('todos')
   const [editando, setEditando] = useState<ChecklistItem | null>(null)
+  const [ia, setIa] = useState(false)
 
   const erro = trip.error ?? checklist.error
   if (erro) return <p className="text-red-600">{erro.message}</p>
@@ -54,6 +56,10 @@ export function ChecklistPage() {
           <h1 className="text-xl font-semibold">Checklist</h1>
           <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
         </div>
+        <Button variant="outline" className="h-10 px-3" onClick={() => setIa(true)}>
+          <Sparkles className="size-4" />
+          <span className="hidden sm:inline">Sugerir com IA</span>
+        </Button>
       </div>
 
       <div className="mb-4 grid grid-cols-2 gap-1 rounded-lg bg-slate-200/70 p-1 text-sm" role="tablist">
@@ -127,6 +133,7 @@ export function ChecklistPage() {
       )}
 
       <ItemDialog tripId={tripId} membros={membros} item={editando} onClose={() => setEditando(null)} />
+      <AiPackingDialog tripId={tripId} open={ia} onClose={() => setIa(false)} />
     </div>
   )
 }

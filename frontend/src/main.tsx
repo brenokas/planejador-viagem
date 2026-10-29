@@ -14,6 +14,7 @@ import { TripsPage } from '@/features/trips/TripsPage'
 import { ItineraryPage } from '@/features/itinerary/ItineraryPage'
 import { ExpensesPage } from '@/features/expenses/ExpensesPage'
 import { ChecklistPage } from '@/features/checklist/ChecklistPage'
+import { AssistantPage } from '@/features/ai/AssistantPage'
 import './index.css'
 
 const queryClient = new QueryClient({
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
           { path: '/viagens/:id/roteiro', element: <ItineraryPage /> },
           { path: '/viagens/:id/orcamento', element: <ExpensesPage /> },
           { path: '/viagens/:id/checklist', element: <ChecklistPage /> },
+          { path: '/viagens/:id/assistente', element: <AssistantPage /> },
           { path: '/explorar', element: <PlaceholderPage title="Explorar" /> },
           { path: '/perfil', element: <PlaceholderPage title="Perfil" /> },
         ],

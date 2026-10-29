@@ -7,6 +7,7 @@ import {
   ChevronRight,
   ListTodo,
   MapPin,
+  MessageCircle,
   MoreVertical,
   Pencil,
   Trash2,
@@ -165,7 +166,7 @@ export function TripDetailPage() {
           <p className="text-sm text-red-600">{(archive.error ?? remove.error)?.message}</p>
         )}
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 sm:grid-cols-2">
           <Section
             icon={ListTodo}
             title="Roteiro"
@@ -183,6 +184,12 @@ export function TripDetailPage() {
             title="Checklist"
             description={resumoChecklist(checklist.data)}
             to={`/viagens/${id}/checklist`}
+          />
+          <Section
+            icon={MessageCircle}
+            title="Assistente"
+            description="Tire dúvidas sobre a viagem com a IA"
+            to={`/viagens/${id}/assistente`}
           />
         </div>
       </div>

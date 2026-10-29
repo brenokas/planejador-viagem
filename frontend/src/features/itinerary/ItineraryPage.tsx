@@ -1,7 +1,8 @@
-import { ArrowLeft, Lightbulb, List, Map as MapIcon, Plus } from 'lucide-react'
+import { ArrowLeft, Lightbulb, List, Map as MapIcon, Plus, Sparkles } from 'lucide-react'
 import { lazy, Suspense, useMemo, useState, type ReactNode } from 'react'
 import { Link, useParams } from 'react-router'
 import { Button } from '@/components/ui/button'
+import { AiDayDialog, AiItineraryDialog } from '@/features/ai/AiItineraryDialogs'
 import { useTrip } from '@/features/trips/api'
 import { cn } from '@/lib/utils'
 import { useActivities, useReorderActivities } from './api'
@@ -23,6 +24,9 @@ export function ItineraryPage() {
   const activities = useActivities(tripId)
   const reorder = useReorderActivities(tripId)
   const [dialog, setDialog] = useState<ActivityDialogState>(null)
+  const [iaRoteiro, setIaRoteiro] = useState(false)
+  /** undefined = fechado; null = Ideias */
+  const [iaDia, setIaDia] = useState<string | null | undefined>(undefined)
   const [visao, setVisao] = useState<'lista' | 'mapa'>('lista')
   const [diaMapa, setDiaMapa] = useState<string>(TODOS)
 
@@ -73,6 +77,10 @@ export function ItineraryPage() {
           <h1 className="text-xl font-semibold">Roteiro</h1>
           <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
         </div>
+        <Button variant="outline" className="h-10 px-3" onClick={() => setIaRoteiro(true)}>
+          <Sparkles className="size-4" />
+          <span className="hidden sm:inline">Sugerir com IA</span>
+        </Button>
         <Button className="h-10" onClick={() => setDialog({ data: datas[0] ?? null })}>
           <Plus className="size-4" />
           <span className="hidden sm:inline">Atividade</span>
@@ -114,6 +122,7 @@ export function ItineraryPage() {
               onEdit={(a) => setDialog({ activity: a })}
               onReorder={(ids) => reorder.mutate({ data: d.data, ids })}
               onShowMap={() => verNoMapa(d.data!)}
+              onSuggest={() => setIaDia(d.data)}
             />
           ))}
 
@@ -132,6 +141,7 @@ export function ItineraryPage() {
             onEdit={(a) => setDialog({ activity: a })}
             onReorder={(ids) => reorder.mutate({ data: null, ids })}
             onShowMap={() => verNoMapa(IDEIAS)}
+            onSuggest={() => setIaDia(null)}
           />
 
           {grupos.foraDasDatas.length > 0 && (
@@ -182,6 +192,8 @@ export function ItineraryPage() {
       </div>
 
       <ActivityDialog trip={trip.data} datas={datas} state={dialog} onClose={() => setDialog(null)} />
+      <AiItineraryDialog trip={trip.data} open={iaRoteiro} onClose={() => setIaRoteiro(false)} />
+      <AiDayDialog trip={trip.data} data={iaDia} onClose={() => setIaDia(undefined)} />
     </div>
   )
 }
