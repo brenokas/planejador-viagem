@@ -53,16 +53,22 @@ Cores de categoria (roteiro/despesas) e dias no mapa são dados, não marca: con
 - `h1`/`h2` recebem `text-balance` e `tracking-tight` na camada base; descrições usam `text-pretty`.
 
 ## 6. Espaçamento e layout
-- Escala do Tailwind (4px). Largura máxima 5xl; detalhe da viagem limita o conteúdo a 2xl abaixo da capa.
-- Mobile primeiro: barra inferior, folha que sobe sobre a capa no detalhe.
+- Escala do Tailwind (4px). Largura máxima 5xl.
+- Mobile primeiro: barra inferior, folha que sobe sobre a capa no resumo da viagem.
+- **Navegação dentro da viagem:** a barra inferior (celular) vira as abas da viagem — Resumo, Roteiro, Orçamento, Checklist, Assistente — e o topo mostra "‹ nome da viagem" para voltar à lista. No desktop as abas ficam numa segunda linha do cabeçalho. Trocar de parte é sempre um toque.
+- Ação principal de criação (atividade, despesa) fica num botão flutuante acima da barra inferior no celular; no desktop, no cabeçalho da tela.
+- Telas da viagem usam `PageHeader` (título + uma linha de contexto + ações), sem botão de voltar próprio.
 
 ## 7. Componentes
 - Raio por função: controles 8px (`rounded-lg`), containers 12px (`rounded-xl`), folhas/dialogs 16px, avatares e chips 9999px.
-- Elevação só em menu, dialog, popover de busca e item sendo arrastado. Cards usam `ring-1 ring-slate-200`, hover escurece o anel.
-- Seções da viagem: lista com divisórias e título em display, sem ícone.
+- Elevação só em menu, dialog, popover de busca, item sendo arrastado e botão flutuante (FAB). Cards usam `ring-1 ring-slate-200`, hover escurece o anel.
+- Resumo da viagem: cards por parte com o número que importa e uma barra de progresso (dias planejados, orçamento usado, itens prontos). Durante a viagem, um card "Hoje" no topo.
+- Confirmações usam `useConfirm()` (folha do app), nunca `window.confirm`. Ação destrutiva: botão vermelho com o verbo ("Excluir viagem").
+- Carregamento: esqueletos (`Skeleton`/`PageSkeleton`), não texto "Carregando…".
+- Roteiro: faixa fixa de dias (`DayJumper`) para pular até um dia; dia vazio vira uma linha só com "Adicionar" e IA; durante a viagem a tela abre no dia de hoje.
 
 ## 8. Movimento
-Só transições de cor/transform ≤150ms em hover. `prefers-reduced-motion` zera transições.
+Transições de cor/transform ≤150ms em hover; folhas entram com deslize curto (200ms). `prefers-reduced-motion` zera transições e animações.
 
 ## 9. Imagem e conteúdo
 - Capa: foto do usuário ou cor sólida da paleta com o nome do destino.
@@ -77,6 +83,7 @@ Só transições de cor/transform ≤150ms em hover. `prefers-reduced-motion` ze
 
 ## 11. Decision log
 - **2026-10-28 · Redesenho visual (operate).** Paleta fria do Tailwind trocada por neutros quentes; acento #0d9488 → #0f6b63 porque o anterior reprovava AA com texto branco; fonte display Bricolage Grotesque; sombras removidas dos cards; próxima viagem em destaque; seções do detalhe viraram lista sem ícones; login sem tile de ícone. Ícones PNG do PWA ainda usam o verde antigo (TODO: regenerar a partir do `favicon.svg`).
+- **2026-10-29 · Revisão de UX (navegação e fluxo).** Barra inferior contextual com as abas da viagem (antes: Viagens/Perfil, nenhuma ativa dentro da viagem, e trocar de parte exigia voltar); "Sair" saiu do cabeçalho (fica no Perfil) e virou avatar → Perfil; FAB para criar atividade/despesa no alcance do polegar; resumo da viagem com cards de progresso e card "Hoje"; roteiro com faixa de dias, dias vazios compactos e abertura no dia atual; confirmações no estilo do app; esqueletos de carregamento; dialogs com rolagem interna (formulários longos cabiam mal no celular) e Esc fechando só o de cima.
 
 ## 12. Referências
 - Tokens: `frontend/src/index.css`.
