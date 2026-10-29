@@ -88,7 +88,7 @@ Toda rota `/api/trips/{id}/**` verifica se o usuário é membro da viagem.
 3. ✅ **Roteiro + mapa** — atividades guardam a data diretamente (sem tabela `Day`); data nula = "Ideias"; atividades fora do período da viagem ficam visíveis numa seção própria.
 4. ✅ **Orçamento + divisão de despesas + câmbio** — câmbio pela open.er-api.com (cobre ARS/CLP/UYU, que a Frankfurter não tem), com taxa editável; acertos registrados como despesas da categoria `ACERTO`; moeda da viagem fica travada após a primeira despesa.
 5. ✅ **Checklist** — abas Bagagem e Tarefas, responsável e prazo opcionais, lista básica para começar e inclusão em lote (que a IA usará na fase 6).
-6. ✅ **IA com Gemini** — Interactions API chamada direto com `RestClient` (sem Spring AI, que não acompanha a API nova nem o Boot 4); lista de modelos com fallback (o plano gratuito alterna entre sobrecarga e falta de cota); saída JSON validada, prévia com seleção e aceite; chat compartilhado com histórico.
+6. ✅ **IA com Gemini** — Interactions API chamada direto com `RestClient` (sem Spring AI, para não depender de uma biblioteca que talvez ainda não suporte a API nova e o Boot 4; não verificado); lista de modelos com fallback (o plano gratuito alterna entre sobrecarga e falta de cota); saída JSON validada, prévia com seleção e aceite; chat compartilhado com histórico.
 7. **Tempo real (SSE)**
 8. **Acabamento** — responsividade, testes, backup (`pg_dump`), README da rede local
 
