@@ -58,7 +58,7 @@ export function ChecklistPage() {
         </div>
         <Button variant="outline" className="h-10 px-3" onClick={() => setIa(true)}>
           <Sparkles className="size-4" />
-          <span className="hidden sm:inline">Sugerir com IA</span>
+          <span className="sr-only sm:not-sr-only">Sugerir com IA</span>
         </Button>
       </div>
 

@@ -23,7 +23,18 @@ function FitBounds({ pontos }: { pontos: [number, number][] }) {
   useEffect(() => {
     if (!chave) return
     const lista = chave.split('|').map((p) => p.split(',').map(Number) as [number, number])
-    map.fitBounds(L.latLngBounds(lista), { padding: [40, 40], maxZoom: 15 })
+    const enquadrar = () => map.fitBounds(L.latLngBounds(lista), { padding: [40, 40], maxZoom: 15 })
+    enquadrar()
+    // No celular o mapa nasce escondido (aba Lista) com tamanho zero; ao aparecer, recalcula e reenquadra.
+    let largura = map.getContainer().clientWidth
+    const observer = new ResizeObserver(() => {
+      const nova = map.getContainer().clientWidth
+      map.invalidateSize()
+      if (largura === 0 && nova > 0) enquadrar()
+      largura = nova
+    })
+    observer.observe(map.getContainer())
+    return () => observer.disconnect()
   }, [map, chave])
   return null
 }

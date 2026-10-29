@@ -79,11 +79,11 @@ export function ItineraryPage() {
         </div>
         <Button variant="outline" className="h-10 px-3" onClick={() => setIaRoteiro(true)}>
           <Sparkles className="size-4" />
-          <span className="hidden sm:inline">Sugerir com IA</span>
+          <span className="sr-only sm:not-sr-only">Sugerir com IA</span>
         </Button>
         <Button className="h-10" onClick={() => setDialog({ data: datas[0] ?? null })}>
           <Plus className="size-4" />
-          <span className="hidden sm:inline">Atividade</span>
+          <span className="sr-only sm:not-sr-only">Atividade</span>
         </Button>
       </div>
 

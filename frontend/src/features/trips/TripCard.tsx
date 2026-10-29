@@ -14,7 +14,7 @@ export function TripCard({ trip }: { trip: Trip }) {
       to={`/viagens/${trip.id}`}
       className="group block overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
     >
-      <TripCover id={trip.id} capaUrl={trip.capaUrl} className="h-28" />
+      <TripCover id={trip.id} capaUrl={trip.capaUrl} destino={trip.destino} className="h-28" />
       <div className="space-y-2 p-4">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold leading-tight group-hover:text-primary">{trip.titulo}</h3>
@@ -29,10 +29,12 @@ export function TripCard({ trip }: { trip: Trip }) {
             {formatStatus(status)}
           </span>
         </div>
-        <p className="flex items-center gap-1.5 text-sm text-slate-600">
-          <MapPin className="size-4 shrink-0" />
-          <span className="truncate">{trip.destino}</span>
-        </p>
+        {trip.capaUrl && (
+          <p className="flex items-center gap-1.5 text-sm text-slate-600">
+            <MapPin className="size-4 shrink-0" />
+            <span className="truncate">{trip.destino}</span>
+          </p>
+        )}
         <div className="flex items-center justify-between">
           <p className="flex items-center gap-1.5 text-sm text-slate-500">
             <CalendarDays className="size-4 shrink-0" />

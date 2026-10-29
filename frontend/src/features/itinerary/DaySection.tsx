@@ -67,7 +67,7 @@ export function DaySection({
       <header className="mb-2 flex items-end justify-between gap-2">
         <div>
           <h2 className="font-semibold">{titulo}</h2>
-          {subtitulo && <p className="text-sm text-slate-500 capitalize">{subtitulo}</p>}
+          {subtitulo && <p className="text-sm text-slate-500 first-letter:uppercase">{subtitulo}</p>}
         </div>
         <div className="flex items-center gap-1 text-sm">
           {total > 0 && <span className="mr-1 text-slate-500">{formatMoney(total, moeda)}</span>}

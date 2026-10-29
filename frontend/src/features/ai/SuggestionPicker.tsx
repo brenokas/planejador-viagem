@@ -63,7 +63,7 @@ export function SuggestionPicker({
       <div className="max-h-[55dvh] space-y-4 overflow-y-auto pr-1">
         {[...grupos.entries()].map(([chave, itens]) => (
           <section key={chave}>
-            <h3 className="mb-1.5 text-sm font-medium text-slate-500 capitalize">
+            <h3 className="mb-1.5 text-sm font-medium text-slate-500 first-letter:uppercase">
               {chave === 'ideias' ? 'Ideias' : formatDay(chave)}
             </h3>
             <ul className="space-y-1.5">

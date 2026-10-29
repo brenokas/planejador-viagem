@@ -83,7 +83,13 @@ export function TripDetailPage() {
   return (
     <div className="-mx-4 -mt-6 sm:mx-0">
       <div className="relative">
-        <TripCover id={trip.id} capaUrl={trip.capaUrl} className="h-44 sm:h-56 sm:rounded-2xl" />
+        <TripCover
+          id={trip.id}
+          capaUrl={trip.capaUrl}
+          destino={trip.destino}
+          tamanho="hero"
+          className="h-44 sm:h-56 sm:rounded-2xl"
+        />
         <div className="absolute inset-x-0 top-0 flex justify-between p-3">
           <Link
             to="/"
@@ -138,9 +144,11 @@ export function TripDetailPage() {
           )}
           <h1 className="text-2xl font-semibold">{trip.titulo}</h1>
           <div className="space-y-1.5 text-sm text-slate-600">
-            <p className="flex items-center gap-2">
-              <MapPin className="size-4 shrink-0" /> {trip.destino}
-            </p>
+            {trip.capaUrl && (
+              <p className="flex items-center gap-2">
+                <MapPin className="size-4 shrink-0" /> {trip.destino}
+              </p>
+            )}
             <p className="flex items-center gap-2">
               <CalendarDays className="size-4 shrink-0" />
               {formatDateRange(trip.dataInicio, trip.dataFim)} · {dias} {dias === 1 ? 'dia' : 'dias'}
@@ -171,7 +179,7 @@ export function TripDetailPage() {
           </button>
           <Button variant="outline" className="h-9 px-3" onClick={() => setConvidar(true)}>
             <UserPlus className="size-4" />
-            <span className="hidden sm:inline">Convidar</span>
+            <span className="sr-only sm:not-sr-only">Convidar</span>
           </Button>
         </div>
 

@@ -37,7 +37,7 @@ export function ExpensesPage() {
         </div>
         <Button className="h-10" onClick={() => setDialog({})}>
           <Plus className="size-4" />
-          <span className="hidden sm:inline">Despesa</span>
+          <span className="sr-only sm:not-sr-only">Despesa</span>
         </Button>
       </div>
 
@@ -222,7 +222,7 @@ function ExpenseList({
     <section className="space-y-5">
       {[...porData.entries()].map(([data, lista]) => (
         <div key={data}>
-          <h3 className="mb-2 text-sm font-medium text-slate-500 capitalize">{formatDia.format(parseDate(data))}</h3>
+          <h3 className="mb-2 text-sm font-medium text-slate-500 first-letter:uppercase">{formatDia.format(parseDate(data))}</h3>
           <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl bg-white ring-1 ring-slate-200">
             {lista.map((e) => (
               <li key={e.id}>
