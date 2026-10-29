@@ -1,7 +1,10 @@
-import { ArrowLeft, SendHorizontal } from 'lucide-react'
+import { SendHorizontal } from 'lucide-react'
 import { useEffect, useRef, useState, type FormEvent, type KeyboardEvent } from 'react'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
+import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
+import { PageSkeleton } from '@/components/ui/skeleton'
+import { useConfirm } from '@/components/ui/use-confirm'
 import { useMe } from '@/features/auth/api'
 import { useTrip } from '@/features/trips/api'
 import { cn } from '@/lib/utils'
@@ -22,6 +25,7 @@ export function AssistantPage() {
   const enviar = useSendMessage(tripId)
   const limpar = useClearChat(tripId)
   const { data: me } = useMe()
+  const confirm = useConfirm()
   const [texto, setTexto] = useState('')
   const fimRef = useRef<HTMLDivElement>(null)
 
@@ -53,33 +57,34 @@ export function AssistantPage() {
 
   const erro = trip.error ?? historico.error
   if (erro) return <p className="text-red-600">{erro.message}</p>
-  if (!trip.data || !historico.data) return <p className="text-slate-500">Carregando…</p>
+  if (!trip.data || !historico.data) return <PageSkeleton />
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col">
-      <div className="mb-4 flex items-center gap-3">
-        <Link
-          to={`/viagens/${tripId}`}
-          className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
-          aria-label="Voltar para a viagem"
-        >
-          <ArrowLeft className="size-5" />
-        </Link>
-        <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-semibold">Assistente</h1>
-          <p className="truncate text-sm text-slate-500">Pergunte sobre {trip.data.destino}</p>
-        </div>
-        {mensagens.length > 0 && (
-          <Button
-            variant="ghost"
-            className="h-9 px-3 text-slate-500"
-            disabled={limpar.isPending}
-            onClick={() => window.confirm('Apagar a conversa para os dois?') && limpar.mutate()}
-          >
-            Limpar
-          </Button>
-        )}
-      </div>
+      <PageHeader
+        title="Assistente"
+        description={`Pergunte sobre ${trip.data.destino}`}
+        actions={
+          mensagens.length > 0 && (
+            <Button
+              variant="ghost"
+              className="h-9 px-3 text-slate-500"
+              disabled={limpar.isPending}
+              onClick={async () => {
+                const ok = await confirm({
+                  titulo: 'Apagar a conversa?',
+                  mensagem: 'As mensagens somem para os dois.',
+                  confirmar: 'Apagar',
+                  perigo: true,
+                })
+                if (ok) limpar.mutate()
+              }}
+            >
+              Limpar
+            </Button>
+          )
+        }
+      />
 
       <div className="flex-1 space-y-3 pb-4" aria-live="polite">
         {mensagens.length === 0 && !pendente && (
@@ -120,7 +125,7 @@ export function AssistantPage() {
 
       <form
         onSubmit={submit}
-        className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] flex items-end gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:bottom-4"
+        className="sticky bottom-[calc(4.75rem+env(safe-area-inset-bottom))] flex items-end gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:bottom-4"
       >
         <textarea
           value={texto}

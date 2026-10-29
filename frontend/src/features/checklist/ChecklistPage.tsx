@@ -1,9 +1,12 @@
-import { ArrowLeft, Check, ChevronDown, Plus, Sparkles } from 'lucide-react'
+import { Check, ChevronDown, Plus, Sparkles } from 'lucide-react'
 import { useState, type FormEvent, type ReactNode } from 'react'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
+import { PageHeader } from '@/components/PageHeader'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { ProgressBar } from '@/components/ui/progress'
+import { PageSkeleton } from '@/components/ui/skeleton'
 import { AiPackingDialog } from '@/features/ai/AiPackingDialog'
 import { useMe } from '@/features/auth/api'
 import { useTrip, type Member } from '@/features/trips/api'
@@ -33,7 +36,7 @@ export function ChecklistPage() {
 
   const erro = trip.error ?? checklist.error
   if (erro) return <p className="text-red-600">{erro.message}</p>
-  if (!trip.data || !checklist.data) return <p className="text-slate-500">Carregando…</p>
+  if (!trip.data || !checklist.data) return <PageSkeleton />
 
   const membros = trip.data.membros
   const daAba = checklist.data.filter((i) => i.tipo === tipo)
@@ -44,23 +47,20 @@ export function ChecklistPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <div className="mb-6 flex items-center gap-3">
-        <Link
-          to={`/viagens/${tripId}`}
-          className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
-          aria-label="Voltar para a viagem"
-        >
-          <ArrowLeft className="size-5" />
-        </Link>
-        <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-semibold">Checklist</h1>
-          <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
-        </div>
-        <Button variant="outline" className="h-10 px-3" onClick={() => setIa(true)}>
-          <Sparkles className="size-4" />
-          <span className="sr-only sm:not-sr-only">Sugerir com IA</span>
-        </Button>
-      </div>
+      <PageHeader
+        title="Checklist"
+        description={
+          checklist.data.length === 0
+            ? 'Mala e tarefas antes de embarcar'
+            : `${checklist.data.filter((i) => i.feito).length} de ${checklist.data.length} itens prontos`
+        }
+        actions={
+          <Button variant="outline" className="h-10 px-3" onClick={() => setIa(true)}>
+            <Sparkles className="size-4" />
+            Sugerir com IA
+          </Button>
+        }
+      />
 
       <div className="mb-4 grid grid-cols-2 gap-1 rounded-lg bg-slate-200/70 p-1 text-sm" role="tablist">
         {ABAS.map((a) => {
@@ -247,16 +247,7 @@ function Progresso({ feitos, total }: { feitos: number; total: number }) {
   const pct = Math.round((feitos / total) * 100)
   return (
     <div className="mb-3 flex items-center gap-3 text-xs text-slate-500">
-      <div
-        className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200"
-        role="progressbar"
-        aria-valuenow={pct}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="Progresso"
-      >
-        <div className="h-full rounded-full bg-primary transition-[width]" style={{ width: `${pct}%` }} />
-      </div>
+      <ProgressBar value={pct} label="Progresso" className="flex-1 bg-slate-200" />
       <span className="tabular-nums">{pct}%</span>
     </div>
   )

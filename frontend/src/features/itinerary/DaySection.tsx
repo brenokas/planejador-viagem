@@ -19,6 +19,7 @@ import { CSS } from '@dnd-kit/utilities'
 import { Map as MapIcon, Plus, Sparkles } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { formatMoney } from '@/lib/format'
+import { cn } from '@/lib/utils'
 import type { Activity } from './api'
 import { ActivityCard } from './ActivityCard'
 import { mapNumbers } from './days'
@@ -30,6 +31,7 @@ export function DaySection({
   atividades,
   moeda,
   vazio,
+  hoje,
   onAdd,
   onEdit,
   onReorder,
@@ -41,7 +43,8 @@ export function DaySection({
   subtitulo?: string
   atividades: Activity[]
   moeda: string
-  vazio: string
+  vazio?: string
+  hoje?: boolean
   onAdd?: () => void
   onEdit: (a: Activity) => void
   onReorder?: (ids: number[]) => void
@@ -62,56 +65,93 @@ export function DaySection({
     onReorder(arrayMove(ids, ids.indexOf(Number(active.id)), ids.indexOf(Number(over.id))))
   }
 
-  return (
-    <section id={id} className="scroll-mt-20">
-      <header className="mb-2 flex items-end justify-between gap-2">
-        <div>
-          <h2 className="font-semibold">{titulo}</h2>
-          {subtitulo && <p className="text-sm text-slate-500 first-letter:uppercase">{subtitulo}</p>}
+  // Dia sem nada: uma linha só, com as ações à mão, para a lista de dias não ficar longa demais.
+  if (atividades.length === 0 && !vazio) {
+    return (
+      <section
+        id={id}
+        className="flex scroll-mt-32 items-center justify-between gap-2 rounded-xl border border-dashed border-slate-300 py-2 pr-1.5 pl-3 md:scroll-mt-44"
+      >
+        <div className="min-w-0">
+          <h2 className="flex items-center gap-2 font-semibold">
+            {titulo}
+            {hoje && <span className="rounded-full bg-primary px-2 py-0.5 font-sans text-xs font-medium text-white">Hoje</span>}
+          </h2>
+          {subtitulo && <p className="truncate text-sm text-slate-500 first-letter:uppercase">{subtitulo}</p>}
         </div>
-        <div className="flex items-center gap-1 text-sm">
-          {total > 0 && <span className="mr-1 text-slate-500">{formatMoney(total, moeda)}</span>}
-          {onShowMap && numeros.size > 0 && (
-            <button
-              onClick={onShowMap}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-primary"
-              aria-label="Ver no mapa"
-              title="Ver no mapa"
-            >
-              <MapIcon className="size-4" />
-            </button>
-          )}
+        <div className="flex shrink-0 items-center">
           {onSuggest && (
-            <button
-              onClick={onSuggest}
-              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-primary"
-              aria-label="Sugerir com IA"
-              title="Sugerir com IA"
-            >
+            <IconAction label="Sugerir com IA" onClick={onSuggest}>
               <Sparkles className="size-4" />
-            </button>
+            </IconAction>
           )}
           {onAdd && (
             <button
               onClick={onAdd}
-              className="rounded-lg p-2 text-primary hover:bg-primary/10"
-              aria-label="Adicionar atividade"
-              title="Adicionar atividade"
+              className="flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-primary hover:bg-primary/10"
             >
-              <Plus className="size-5" />
+              <Plus className="size-4" /> Adicionar
             </button>
           )}
         </div>
+      </section>
+    )
+  }
+
+  return (
+    <section id={id} className="scroll-mt-32 md:scroll-mt-44">
+      <header className="mb-2 flex items-end justify-between gap-2">
+        <div className="min-w-0">
+          <h2 className="flex items-center gap-2 font-semibold">
+            {titulo}
+            {hoje && <span className="rounded-full bg-primary px-2 py-0.5 font-sans text-xs font-medium text-white">Hoje</span>}
+          </h2>
+          {subtitulo && <p className="text-sm text-slate-500 first-letter:uppercase">{subtitulo}</p>}
+        </div>
+        {atividades.length > 0 && (
+          <div className="flex items-center gap-0.5 text-sm">
+            {total > 0 && <span className="mr-1 text-slate-500 tabular-nums">{formatMoney(total, moeda)}</span>}
+            {onShowMap && numeros.size > 0 && (
+              <IconAction label="Ver no mapa" onClick={onShowMap}>
+                <MapIcon className="size-4" />
+              </IconAction>
+            )}
+            {onSuggest && (
+              <IconAction label="Sugerir mais com IA" onClick={onSuggest}>
+                <Sparkles className="size-4" />
+              </IconAction>
+            )}
+            {onAdd && (
+              <IconAction label="Adicionar atividade" onClick={onAdd} className="text-primary hover:bg-primary/10">
+                <Plus className="size-5" />
+              </IconAction>
+            )}
+          </div>
+        )}
       </header>
 
       {atividades.length === 0 ? (
-        <button
-          onClick={onAdd}
-          disabled={!onAdd}
-          className="w-full rounded-lg border border-dashed border-slate-300 px-4 py-3 text-left text-sm text-slate-500 hover:border-primary hover:text-primary"
-        >
-          {vazio}
-        </button>
+        <div className="rounded-xl border border-dashed border-slate-300 px-3 py-2.5">
+          {vazio && <p className="mb-2 px-1 text-sm text-pretty text-slate-500">{vazio}</p>}
+          <div className="flex flex-wrap gap-1">
+            {onAdd && (
+              <button
+                onClick={onAdd}
+                className="flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-primary hover:bg-primary/10"
+              >
+                <Plus className="size-4" /> Adicionar
+              </button>
+            )}
+            {onSuggest && (
+              <button
+                onClick={onSuggest}
+                className="flex h-9 items-center gap-1.5 rounded-lg px-2.5 text-sm font-medium text-slate-600 hover:bg-slate-100"
+              >
+                <Sparkles className="size-4" /> Sugerir com IA
+              </button>
+            )}
+          </div>
+        </div>
       ) : onReorder ? (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <SortableContext items={atividades.map((a) => a.id)} strategy={verticalListSortingStrategy}>
@@ -162,5 +202,28 @@ function SortableItem({
         handleProps={{ ...attributes, ...listeners }}
       />
     </li>
+  )
+}
+
+function IconAction({
+  label,
+  onClick,
+  className,
+  children,
+}: {
+  label: string
+  onClick: () => void
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      title={label}
+      className={cn('flex size-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-primary', className)}
+    >
+      {children}
+    </button>
   )
 }

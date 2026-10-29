@@ -1,8 +1,13 @@
-import { ArrowLeft, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { useParams } from 'react-router'
+import { PageHeader } from '@/components/PageHeader'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Fab } from '@/components/ui/fab'
+import { ProgressBar } from '@/components/ui/progress'
+import { PageSkeleton } from '@/components/ui/skeleton'
+import { useConfirm } from '@/components/ui/use-confirm'
 import { useTrip, type Trip } from '@/features/trips/api'
 import { formatMoney, parseDate } from '@/lib/format'
 import { cn } from '@/lib/utils'
@@ -19,36 +24,43 @@ export function ExpensesPage() {
 
   const erro = trip.error ?? expenses.error ?? summary.error
   if (erro) return <p className="text-red-600">{erro.message}</p>
-  if (!trip.data || !expenses.data || !summary.data) return <p className="text-slate-500">Carregando…</p>
+  if (!trip.data || !expenses.data || !summary.data) return <PageSkeleton />
+
+  const lancadas = expenses.data.filter((e) => e.categoria !== 'ACERTO').length
 
   return (
     <div>
-      <div className="mb-6 flex items-center gap-3">
-        <Link
-          to={`/viagens/${tripId}`}
-          className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
-          aria-label="Voltar para a viagem"
-        >
-          <ArrowLeft className="size-5" />
-        </Link>
-        <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-semibold">Orçamento</h1>
-          <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
+      <PageHeader
+        title="Orçamento"
+        description={lancadas === 0 ? 'Nenhuma despesa ainda' : `${lancadas} ${lancadas === 1 ? 'despesa lançada' : 'despesas lançadas'}`}
+        actions={
+          <Button className="hidden h-10 sm:inline-flex" onClick={() => setDialog({})}>
+            <Plus className="size-4" />
+            Despesa
+          </Button>
+        }
+      />
+
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_auto_auto_1fr] lg:gap-6">
+        <div className="lg:col-start-1">
+          <BudgetOverview summary={summary.data} />
         </div>
-        <Button className="h-10" onClick={() => setDialog({})}>
-          <Plus className="size-4" />
-          <span className="sr-only sm:not-sr-only">Despesa</span>
-        </Button>
+        <div className="empty:hidden lg:col-start-1">
+          <Balances tripId={tripId} summary={summary.data} temDespesas={expenses.data.length > 0} />
+        </div>
+        <div className="mt-2 lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:mt-0">
+          <ExpenseList trip={trip.data} expenses={expenses.data} onEdit={(e) => setDialog({ expense: e })} onAdd={() => setDialog({})} />
+        </div>
+        {summary.data.porCategoria.length > 0 && (
+          <div className="lg:col-start-1">
+            <ByCategory summary={summary.data} />
+          </div>
+        )}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
-        <div className="space-y-4">
-          <BudgetOverview summary={summary.data} />
-          <Balances tripId={tripId} summary={summary.data} temDespesas={expenses.data.length > 0} />
-          {summary.data.porCategoria.length > 0 && <ByCategory summary={summary.data} />}
-        </div>
-        <ExpenseList trip={trip.data} expenses={expenses.data} onEdit={(e) => setDialog({ expense: e })} onAdd={() => setDialog({})} />
-      </div>
+      <Fab aria-label="Adicionar despesa" onClick={() => setDialog({})}>
+        <Plus className="size-6" />
+      </Fab>
 
       <ExpenseDialog trip={trip.data} state={dialog} onClose={() => setDialog(null)} />
     </div>
@@ -63,20 +75,16 @@ function BudgetOverview({ summary }: { summary: Summary }) {
   return (
     <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
       <p className="text-sm text-slate-500">Gasto até agora</p>
-      <p className="mt-1 text-3xl font-semibold tabular-nums">{formatMoney(gasto, moeda)}</p>
+      <p className="mt-1 font-display text-4xl font-semibold tracking-tight tabular-nums">{formatMoney(gasto, moeda)}</p>
 
       {orcamento != null ? (
         <div className="mt-4 space-y-2">
-          <div
-            className="h-2 overflow-hidden rounded-full bg-slate-100"
-            role="progressbar"
-            aria-valuenow={pct}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Uso do orçamento"
-          >
-            <div className={cn('h-full rounded-full', estourou ? 'bg-red-500' : 'bg-primary')} style={{ width: `${pct}%` }} />
-          </div>
+          <ProgressBar
+            value={pct}
+            label="Uso do orçamento"
+            className="h-2"
+            barClassName={estourou ? 'bg-red-500' : undefined}
+          />
           <p className={cn('text-sm', estourou ? 'text-red-600' : 'text-slate-600')}>
             {estourou
               ? `${formatMoney(gasto - orcamento, moeda)} acima do orçamento de ${formatMoney(orcamento, moeda)}`
@@ -98,6 +106,7 @@ function BudgetOverview({ summary }: { summary: Summary }) {
 
 function Balances({ tripId, summary, temDespesas }: { tripId: number; summary: Summary; temDespesas: boolean }) {
   const settle = useSettle(tripId)
+  const confirm = useConfirm()
   const { moeda, pessoas, acertos } = summary
   if (pessoas.length < 2 || !temDespesas) return null
 
@@ -120,11 +129,13 @@ function Balances({ tripId, summary, temDespesas }: { tripId: number; summary: S
                 variant="outline"
                 className="h-9 shrink-0 px-3"
                 disabled={settle.isPending}
-                onClick={() => {
-                  const pergunta = `Registrar que ${a.de.nome.split(' ')[0]} pagou ${formatMoney(a.valorCentavos, moeda)} para ${a.para.nome.split(' ')[0]}?`
-                  if (window.confirm(pergunta)) {
-                    settle.mutate({ de: a.de.id, para: a.para.id, valorCentavos: a.valorCentavos })
-                  }
+                onClick={async () => {
+                  const ok = await confirm({
+                    titulo: 'Registrar pagamento?',
+                    mensagem: `${a.de.nome.split(' ')[0]} pagou ${formatMoney(a.valorCentavos, moeda)} para ${a.para.nome.split(' ')[0]}. Isso entra na lista como um acerto entre vocês.`,
+                    confirmar: 'Registrar',
+                  })
+                  if (ok) settle.mutate({ de: a.de.id, para: a.para.id, valorCentavos: a.valorCentavos })
                 }}
               >
                 Marcar como pago
@@ -197,15 +208,19 @@ function ExpenseList({
   onAdd: () => void
 }) {
   const remove = useDeleteExpense(trip.id)
+  const confirm = useConfirm()
 
   if (expenses.length === 0) {
     return (
-      <button
-        onClick={onAdd}
-        className="h-fit rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center text-sm text-slate-500 hover:border-primary hover:text-primary"
-      >
-        Nenhuma despesa lançada. Toque para adicionar a primeira.
-      </button>
+      <div className="rounded-xl border border-dashed border-slate-300 px-6 py-10 text-center">
+        <p className="font-medium">Nenhuma despesa lançada</p>
+        <p className="mx-auto mt-1 max-w-xs text-sm text-pretty text-slate-500">
+          Registrem o que cada um pagou. O app divide e mostra quem deve quanto.
+        </p>
+        <Button variant="outline" className="mt-4" onClick={onAdd}>
+          <Plus className="size-4" /> Lançar despesa
+        </Button>
+      </div>
     )
   }
 
@@ -213,16 +228,25 @@ function ExpenseList({
   for (const e of expenses) porData.set(e.data, [...(porData.get(e.data) ?? []), e])
   const formatDia = new Intl.DateTimeFormat('pt-BR', { weekday: 'short', day: 'numeric', month: 'short' })
 
-  const handleClick = (e: Expense) => {
+  const handleClick = async (e: Expense) => {
     if (e.categoria !== 'ACERTO') return onEdit(e)
-    if (window.confirm(`Desfazer "${e.descricao}"?`)) remove.mutate(e.id)
+    const ok = await confirm({ titulo: 'Desfazer acerto?', mensagem: e.descricao, confirmar: 'Desfazer', perigo: true })
+    if (ok) remove.mutate(e.id)
   }
 
   return (
     <section className="space-y-5">
       {[...porData.entries()].map(([data, lista]) => (
         <div key={data}>
-          <h3 className="mb-2 text-sm font-medium text-slate-500 first-letter:uppercase">{formatDia.format(parseDate(data))}</h3>
+          <h3 className="mb-2 flex justify-between gap-2 px-1 text-sm font-medium text-slate-500">
+            <span className="first-letter:uppercase">{formatDia.format(parseDate(data))}</span>
+            <span className="tabular-nums">
+              {formatMoney(
+                lista.filter((e) => e.categoria !== 'ACERTO').reduce((s, e) => s + e.valorConvertidoCentavos, 0),
+                trip.moeda,
+              )}
+            </span>
+          </h3>
           <ul className="divide-y divide-slate-100 overflow-hidden rounded-xl bg-white ring-1 ring-slate-200">
             {lista.map((e) => (
               <li key={e.id}>
