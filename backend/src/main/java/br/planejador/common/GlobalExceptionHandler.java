@@ -13,6 +13,8 @@ import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.async.AsyncRequestNotUsableException;
+import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -42,6 +44,11 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	ResponseEntity<ApiError> handleUnreadable(HttpMessageNotReadableException ex) {
 		return ResponseEntity.badRequest().body(new ApiError("Requisição inválida."));
+	}
+
+	@ExceptionHandler({ AsyncRequestNotUsableException.class, AsyncRequestTimeoutException.class })
+	void handleStreamClosed() {
+		// Cliente fechou a conexão SSE ou ela expirou: comportamento normal, nada a responder.
 	}
 
 	@ExceptionHandler(Exception.class)
