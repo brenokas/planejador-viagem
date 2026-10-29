@@ -3,18 +3,15 @@ import {
   ArchiveRestore,
   ArrowLeft,
   CalendarDays,
-  CheckSquare,
   ChevronRight,
-  ListTodo,
   MapPin,
-  MessageCircle,
   MoreVertical,
   Pencil,
   Trash2,
   UserPlus,
   Wallet,
 } from 'lucide-react'
-import { useState, type ComponentType } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { AvatarGroup } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -88,7 +85,7 @@ export function TripDetailPage() {
           capaUrl={trip.capaUrl}
           destino={trip.destino}
           tamanho="hero"
-          className="h-44 sm:h-56 sm:rounded-2xl"
+          className="h-44 sm:h-56 sm:rounded-xl"
         />
         <div className="absolute inset-x-0 top-0 flex justify-between p-3">
           <Link
@@ -135,14 +132,17 @@ export function TripDetailPage() {
         </div>
       </div>
 
-      <div className="relative -mt-6 space-y-6 rounded-t-3xl bg-slate-50 px-4 pt-6 sm:mt-6 sm:rounded-none sm:bg-transparent sm:px-0 sm:pt-0">
+      <div className="relative -mt-6 space-y-6 rounded-t-3xl bg-slate-50 px-4 pt-6 sm:mt-8 sm:max-w-2xl sm:rounded-none sm:bg-transparent sm:px-0 sm:pt-0">
         <div className="space-y-3">
           {trip.arquivada && (
             <span className="inline-block rounded-full bg-slate-200 px-2.5 py-0.5 text-xs font-medium text-slate-600">
               Arquivada
             </span>
           )}
-          <h1 className="text-2xl font-semibold">{trip.titulo}</h1>
+          <div>
+            <p className="text-sm font-medium text-primary">{formatStatus(tripStatus(trip.dataInicio, trip.dataFim))}</p>
+            <h1 className="text-3xl leading-tight font-semibold">{trip.titulo}</h1>
+          </div>
           <div className="space-y-1.5 text-sm text-slate-600">
             {trip.capaUrl && (
               <p className="flex items-center gap-2">
@@ -152,7 +152,6 @@ export function TripDetailPage() {
             <p className="flex items-center gap-2">
               <CalendarDays className="size-4 shrink-0" />
               {formatDateRange(trip.dataInicio, trip.dataFim)} · {dias} {dias === 1 ? 'dia' : 'dias'}
-              <span className="text-primary">· {formatStatus(tripStatus(trip.dataInicio, trip.dataFim))}</span>
             </p>
             {trip.orcamentoCentavos != null && (
               <p className="flex items-center gap-2">
@@ -162,7 +161,7 @@ export function TripDetailPage() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+        <div className="flex items-center justify-between gap-3">
           <button onClick={() => setParticipantes(true)} className="flex items-center gap-3 text-left">
             <AvatarGroup pessoas={trip.membros} online={outrosOnline.map((m) => m.id)} />
             <span className="text-sm text-slate-600">
@@ -187,32 +186,16 @@ export function TripDetailPage() {
           <p className="text-sm text-red-600">{(archive.error ?? remove.error)?.message}</p>
         )}
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <nav aria-label="Partes da viagem" className="divide-y divide-slate-200 border-y border-slate-200">
+          <Section title="Roteiro" description={resumoRoteiro(atividades.data?.length)} to={`/viagens/${id}/roteiro`} />
+          <Section title="Orçamento" description={resumoOrcamento(resumo.data)} to={`/viagens/${id}/orcamento`} />
+          <Section title="Checklist" description={resumoChecklist(checklist.data)} to={`/viagens/${id}/checklist`} />
           <Section
-            icon={ListTodo}
-            title="Roteiro"
-            description={resumoRoteiro(atividades.data?.length)}
-            to={`/viagens/${id}/roteiro`}
-          />
-          <Section
-            icon={Wallet}
-            title="Orçamento"
-            description={resumoOrcamento(resumo.data)}
-            to={`/viagens/${id}/orcamento`}
-          />
-          <Section
-            icon={CheckSquare}
-            title="Checklist"
-            description={resumoChecklist(checklist.data)}
-            to={`/viagens/${id}/checklist`}
-          />
-          <Section
-            icon={MessageCircle}
             title="Assistente"
-            description="Tire dúvidas sobre a viagem com a IA"
+            description="Pergunte à IA sobre o destino, com o roteiro e o orçamento de vocês em mãos"
             to={`/viagens/${id}/assistente`}
           />
-        </div>
+        </nav>
       </div>
 
       <InviteDialog trip={trip} open={convidar} onClose={() => setConvidar(false)} />
@@ -226,30 +209,14 @@ export function TripDetailPage() {
   )
 }
 
-function Section({
-  icon: Icon,
-  title,
-  description,
-  to,
-}: {
-  icon: ComponentType<{ className?: string }>
-  title: string
-  description: string
-  to: string
-}) {
+function Section({ title, description, to }: { title: string; description: string; to: string }) {
   return (
-    <Link
-      to={to}
-      className="flex items-center gap-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md hover:ring-primary/40"
-    >
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-        <Icon className="size-5" />
-      </div>
+    <Link to={to} className="group flex items-center gap-4 py-4 transition-colors hover:bg-slate-100 sm:px-2">
       <div className="min-w-0 flex-1">
-        <p className="font-medium">{title}</p>
-        <p className="truncate text-sm text-slate-500">{description}</p>
+        <p className="font-display text-xl font-semibold tracking-tight group-hover:text-primary">{title}</p>
+        <p className="text-sm text-pretty text-slate-600">{description}</p>
       </div>
-      <ChevronRight className="size-5 shrink-0 text-slate-400" />
+      <ChevronRight className="size-5 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5" />
     </Link>
   )
 }

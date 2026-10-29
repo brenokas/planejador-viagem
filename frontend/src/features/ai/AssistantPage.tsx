@@ -66,7 +66,7 @@ export function AssistantPage() {
           <ArrowLeft className="size-5" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold">Assistente</h1>
+          <h1 className="text-2xl font-semibold">Assistente</h1>
           <p className="truncate text-sm text-slate-500">Pergunte sobre {trip.data.destino}</p>
         </div>
         {mensagens.length > 0 && (
@@ -83,7 +83,7 @@ export function AssistantPage() {
 
       <div className="flex-1 space-y-3 pb-4" aria-live="polite">
         {mensagens.length === 0 && !pendente && (
-          <div className="rounded-2xl bg-white p-5 ring-1 ring-slate-200">
+          <div className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
             <p className="text-sm text-slate-600">
               O assistente conhece o roteiro, o orçamento e o checklist desta viagem. A conversa fica salva e os dois
               veem as mesmas mensagens.
@@ -120,7 +120,7 @@ export function AssistantPage() {
 
       <form
         onSubmit={submit}
-        className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] flex items-end gap-2 rounded-2xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:bottom-4"
+        className="sticky bottom-[calc(4.5rem+env(safe-area-inset-bottom))] flex items-end gap-2 rounded-xl bg-white p-2 shadow-sm ring-1 ring-slate-200 md:bottom-4"
       >
         <textarea
           value={texto}

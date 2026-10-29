@@ -31,7 +31,7 @@ export function ActivityCard({
   return (
     <div
       className={cn(
-        'flex items-stretch gap-1 rounded-xl bg-white shadow-sm ring-1 ring-slate-200',
+        'flex items-stretch gap-1 rounded-xl bg-white ring-1 ring-slate-200',
         dragging && 'shadow-lg ring-primary',
       )}
     >

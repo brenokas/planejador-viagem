@@ -29,7 +29,7 @@ export function ProfilePage() {
       <NameForm key={me.nome} me={me} />
       <PasswordForm />
 
-      <section className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
         <h2 className="font-semibold">Usar como app no celular</h2>
         <ul className="mt-2 space-y-1.5 text-sm text-slate-600">
           <li>
@@ -76,7 +76,7 @@ function NameForm({ me }: { me: User }) {
   )
 
   return (
-    <form onSubmit={submit} className="space-y-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200" noValidate>
+    <form onSubmit={submit} className="space-y-4 rounded-xl bg-white p-5 ring-1 ring-slate-200" noValidate>
       <h2 className="font-semibold">Seus dados</h2>
       <Field label="Nome" htmlFor="nome" error={errors.nome?.message}>
         <Input id="nome" autoComplete="name" aria-invalid={!!errors.nome} {...register('nome')} />
@@ -129,7 +129,7 @@ function PasswordForm() {
   })
 
   return (
-    <form onSubmit={submit} className="space-y-4 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200" noValidate>
+    <form onSubmit={submit} className="space-y-4 rounded-xl bg-white p-5 ring-1 ring-slate-200" noValidate>
       <h2 className="font-semibold">Trocar senha</h2>
       <Field label="Senha atual" htmlFor="senhaAtual" error={errors.senhaAtual?.message}>
         <Input

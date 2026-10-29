@@ -32,7 +32,7 @@ export function ExpensesPage() {
           <ArrowLeft className="size-5" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold">Orçamento</h1>
+          <h1 className="text-2xl font-semibold">Orçamento</h1>
           <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
         </div>
         <Button className="h-10" onClick={() => setDialog({})}>
@@ -61,7 +61,7 @@ function BudgetOverview({ summary }: { summary: Summary }) {
   const estourou = orcamento != null && gasto > orcamento
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
       <p className="text-sm text-slate-500">Gasto até agora</p>
       <p className="mt-1 text-3xl font-semibold tabular-nums">{formatMoney(gasto, moeda)}</p>
 
@@ -102,7 +102,7 @@ function Balances({ tripId, summary, temDespesas }: { tripId: number; summary: S
   if (pessoas.length < 2 || !temDespesas) return null
 
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
       <h2 className="font-semibold">Acertos</h2>
 
       {acertos.length === 0 ? (
@@ -160,7 +160,7 @@ function Balances({ tripId, summary, temDespesas }: { tripId: number; summary: S
 function ByCategory({ summary }: { summary: Summary }) {
   const maior = summary.porCategoria[0]?.totalCentavos ?? 1
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+    <section className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
       <h2 className="mb-3 font-semibold">Por categoria</h2>
       <ul className="space-y-3">
         {summary.porCategoria.map((c) => {
@@ -202,7 +202,7 @@ function ExpenseList({
     return (
       <button
         onClick={onAdd}
-        className="h-fit rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center text-sm text-slate-500 hover:border-primary hover:text-primary"
+        className="h-fit rounded-xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center text-sm text-slate-500 hover:border-primary hover:text-primary"
       >
         Nenhuma despesa lançada. Toque para adicionar a primeira.
       </button>

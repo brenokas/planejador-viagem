@@ -108,7 +108,7 @@ export function DaySection({
         <button
           onClick={onAdd}
           disabled={!onAdd}
-          className="w-full rounded-xl border border-dashed border-slate-300 px-4 py-4 text-sm text-slate-500 hover:border-primary hover:text-primary"
+          className="w-full rounded-lg border border-dashed border-slate-300 px-4 py-3 text-left text-sm text-slate-500 hover:border-primary hover:text-primary"
         >
           {vazio}
         </button>

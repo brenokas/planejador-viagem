@@ -34,7 +34,7 @@ export function TripCover({
       >
         <p
           className={cn(
-            'font-bold tracking-tight text-balance',
+            'font-display font-bold tracking-tight text-balance',
             tamanho === 'hero' ? 'text-4xl leading-none sm:text-5xl' : 'line-clamp-1 text-2xl leading-tight',
           )}
         >

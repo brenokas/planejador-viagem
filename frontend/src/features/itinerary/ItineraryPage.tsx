@@ -74,7 +74,7 @@ export function ItineraryPage() {
           <ArrowLeft className="size-5" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold">Roteiro</h1>
+          <h1 className="text-2xl font-semibold">Roteiro</h1>
           <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
         </div>
         <Button variant="outline" className="h-10 px-3" onClick={() => setIaRoteiro(true)}>
@@ -174,7 +174,7 @@ export function ItineraryPage() {
                 Ideias
               </Chip>
             </div>
-            <div className="relative isolate h-[65dvh] overflow-hidden rounded-2xl ring-1 ring-slate-200 lg:h-[calc(100dvh-10rem)]">
+            <div className="relative isolate h-[65dvh] overflow-hidden rounded-xl ring-1 ring-slate-200 lg:h-[calc(100dvh-10rem)]">
               {semCoordenadas ? (
                 <div className="flex size-full flex-col items-center justify-center bg-white px-6 text-center text-sm text-slate-500">
                   <MapIcon className="mb-3 size-8 text-slate-300" />

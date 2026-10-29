@@ -57,7 +57,7 @@ export function LoginPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-sm text-slate-600">
         Ainda não tem conta?{' '}
         <Link to="/cadastro" state={{ from: target }} className="font-medium text-primary hover:underline">
           Criar conta

@@ -1,4 +1,3 @@
-import { CalendarDays, MapPin, Plane } from 'lucide-react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { Button } from '@/components/ui/button'
 import { buttonClass } from '@/components/ui/button-class'
@@ -17,7 +16,7 @@ export function InvitePage() {
   if (error) {
     return (
       <AuthLayout title="Convite">
-        <p className="text-center text-slate-700">{error.message}</p>
+        <p className="text-slate-700">{error.message}</p>
         <Link to="/" className={buttonClass('outline', 'mt-6 w-full')}>
           Ir para minhas viagens
         </Link>
@@ -28,20 +27,14 @@ export function InvitePage() {
   if (convite.jaMembro) return <Navigate to={`/viagens/${convite.tripId}`} replace />
 
   return (
-    <AuthLayout title="Você foi convidado!">
-      <p className="text-center text-sm text-slate-600">
-        <strong>{convite.convidadoPor}</strong> convidou você para planejar a viagem:
+    <AuthLayout title="Convite para uma viagem">
+      <p className="text-slate-600">
+        <strong className="text-slate-900">{convite.convidadoPor}</strong> chamou você para planejar junto:
       </p>
-      <div className="my-5 space-y-2 rounded-xl bg-slate-50 p-4">
-        <p className="flex items-center gap-2 font-semibold">
-          <Plane className="size-4 text-primary" /> {convite.titulo}
-        </p>
-        <p className="flex items-center gap-2 text-sm text-slate-600">
-          <MapPin className="size-4" /> {convite.destino}
-        </p>
-        <p className="flex items-center gap-2 text-sm text-slate-600">
-          <CalendarDays className="size-4" /> {formatDateRange(convite.dataInicio, convite.dataFim)}
-        </p>
+      <div className="my-6 rounded-xl bg-white p-5 ring-1 ring-slate-200">
+        <p className="font-display text-2xl leading-tight font-semibold tracking-tight">{convite.titulo}</p>
+        <p className="mt-2 text-sm text-slate-600">{convite.destino}</p>
+        <p className="text-sm text-slate-600">{formatDateRange(convite.dataInicio, convite.dataFim)}</p>
       </div>
       {accept.error && <p className="mb-3 text-sm text-red-600">{accept.error.message}</p>}
       <Button
@@ -51,7 +44,7 @@ export function InvitePage() {
       >
         {accept.isPending ? 'Entrando…' : 'Aceitar convite'}
       </Button>
-      <Link to="/" className="mt-3 block text-center text-sm text-slate-500 hover:underline">
+      <Link to="/" className="mt-4 block text-center text-sm text-slate-500 hover:underline">
         Agora não
       </Link>
     </AuthLayout>

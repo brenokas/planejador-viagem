@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 
-const cores = ['bg-teal-600', 'bg-rose-500', 'bg-amber-500', 'bg-indigo-500', 'bg-sky-600', 'bg-fuchsia-600']
+const cores = ['bg-teal-700', 'bg-rose-700', 'bg-amber-700', 'bg-sky-800', 'bg-emerald-800', 'bg-orange-700']
 
 function iniciais(nome: string) {
   const partes = nome.trim().split(/\s+/)

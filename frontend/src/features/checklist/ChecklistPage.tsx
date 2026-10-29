@@ -53,7 +53,7 @@ export function ChecklistPage() {
           <ArrowLeft className="size-5" />
         </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-xl font-semibold">Checklist</h1>
+          <h1 className="text-2xl font-semibold">Checklist</h1>
           <p className="truncate text-sm text-slate-500">{trip.data.titulo}</p>
         </div>
         <Button variant="outline" className="h-10 px-3" onClick={() => setIa(true)}>

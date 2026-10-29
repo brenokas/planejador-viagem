@@ -9,7 +9,7 @@ export function NewTripPage() {
   return (
     <div className="mx-auto max-w-lg">
       <h1 className="mb-6 text-2xl font-semibold">Nova viagem</h1>
-      <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <div className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
         <TripForm
           submitLabel="Criar viagem"
           pending={create.isPending}
@@ -39,7 +39,7 @@ export function EditTripPage() {
   return (
     <div className="mx-auto max-w-lg">
       <h1 className="mb-6 text-2xl font-semibold">Editar viagem</h1>
-      <div className="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+      <div className="rounded-xl bg-white p-5 ring-1 ring-slate-200">
         <TripForm
           key={trip.version}
           trip={trip}

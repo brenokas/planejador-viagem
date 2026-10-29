@@ -79,7 +79,7 @@ export function RegisterPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-600">
+      <p className="mt-6 text-sm text-slate-600">
         Já tem conta?{' '}
         <Link to="/login" state={{ from: target }} className="font-medium text-primary hover:underline">
           Entrar
