@@ -45,6 +45,14 @@ public class User {
 		return id;
 	}
 
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setSenhaHash(String senhaHash) {
+		this.senhaHash = senhaHash;
+	}
+
 	public String getNome() {
 		return nome;
 	}
